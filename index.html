@@ -58,8 +58,13 @@ body {
 	<title>My Website</title>
 
 <script>
-window.VWO = window.VWO || [];
-window.VWO.push(['setVariation', [{e: '73', v: '3'},{e: '27', v: '3'}, {e: '33', v: '2'},{e: '77', v: '2'}, {e: '145', v: '3'}]]);
+	function udpateAttribute(){
+	window.VWO = window.VWO || [];
+	VWO.visitor = VWO.visitor || function () {VWO.push(["visitor"].concat([].slice.call(arguments)))};
+
+	// Replace "<text_value>" with your actual property value
+	VWO.visitor({ "firstname2": "ganesh" });
+	}
 </script>
 
 	<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script><!-- Start VWO Async SmartCode --><script type='text/javascript'>
@@ -128,7 +133,7 @@ id="contactUsForm"
 <label for="lname">Last name:</label><br />
 <input id="lname" name="lname" type="text" value="VWO" /><br />
 <label for="email">Email:</label><br />
-<input id="email" name="email" type="text" value="temporary@gmail.com" /><br />
+<input id="email" name="email" type="text" onchange()="udpateAttribute()" value="temporary@gmail.com" /><br />
 <br />
 <input type="submit" value="Submit" /></form>
 </div>
