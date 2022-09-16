@@ -121,11 +121,11 @@ id="contactUsForm"
 
 -->
 <form action="contact_us.html" id="contactUsForm"><label for="fname">First name:</label><br />
-<input id="fname" name="fname" type="text" value="Wingify" /><br />
+<input id="fname" name="fname" type="text" onchange="udpateAttribute()" value="Wingify" /><br />
 <label for="lname">Last name:</label><br />
 <input id="lname" name="lname" type="text" value="VWO" /><br />
 <label for="email">Email:</label><br />
-<input id="email" name="email" type="text" onchange="udpateAttribute()" value="temporary@gmail.com" /><br />
+<input id="email" name="email" type="text"  value="temporary@gmail.com" /><br />
 <br />
 <input type="submit" value="Submit" /></form>
 </div>
@@ -230,8 +230,9 @@ function myFunction() {
 	window.VWO = window.VWO || [];
 	VWO.visitor = VWO.visitor || function () {VWO.push(["visitor"].concat([].slice.call(arguments)))};
 
+	const x=document.getElementById('fname').value;
 	// Replace "<text_value>" with your actual property value
-	VWO.visitor({ "firstname2": "ganesh" });
+	VWO.visitor({ "firstname2": x });
 	}
 
 
