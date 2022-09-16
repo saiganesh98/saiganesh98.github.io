@@ -57,16 +57,7 @@ body {
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>My Website</title>
 
-<script>
-	function udpateAttribute(){
-		console.log('entered update attribute method')
-	window.VWO = window.VWO || [];
-	VWO.visitor = VWO.visitor || function () {VWO.push(["visitor"].concat([].slice.call(arguments)))};
 
-	// Replace "<text_value>" with your actual property value
-	VWO.visitor({ "firstname2": "ganesh" });
-	}
-</script>
 
 	<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script><!-- Start VWO Async SmartCode --><script type='text/javascript'>
 window._vwo_code = window._vwo_code || (function(){
@@ -134,7 +125,7 @@ id="contactUsForm"
 <label for="lname">Last name:</label><br />
 <input id="lname" name="lname" type="text" value="VWO" /><br />
 <label for="email">Email:</label><br />
-<input id="email" name="email" type="text" onchange()="udpateAttribute()" value="temporary@gmail.com" /><br />
+<input id="email" name="email" type="text" onchange="udpateAttribute()" value="temporary@gmail.com" /><br />
 <br />
 <input type="submit" value="Submit" /></form>
 </div>
@@ -231,6 +222,20 @@ let docHeight = Math.max(
 function myFunction() {
   location.href=document.getElementById("input").value
 }
+
+
+
+	function udpateAttribute(){
+		console.log('entered update attribute method')
+	window.VWO = window.VWO || [];
+	VWO.visitor = VWO.visitor || function () {VWO.push(["visitor"].concat([].slice.call(arguments)))};
+
+	// Replace "<text_value>" with your actual property value
+	VWO.visitor({ "firstname2": "ganesh" });
+	}
+
+
+
 </script></p>
 <card1><app3 id="testelement">testelement</app3></card1>
 
