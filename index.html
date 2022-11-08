@@ -146,6 +146,23 @@ id="contactUsForm"
 			window.VWO = window.VWO || [];VWO.push(['optOutVisitor'])
 		}	
 		</script></p>
+	p><button onclick="optOutApiExperiencesTrue()">OPTOUTWithExperiencesTrue</button><script>
+		function optOutApiExperiencesTrue() {
+			window.VWO = window.VWO || [];
+window.VWO.push(['optOutVisitor', {maintainExperiences: true }]);
+	}	
+	</script></p>
+	p><button onclick="optOutApiExperiencesFalse()">OPTOUTWithExperiencesFalse</button><script>
+		function optOutApiExperiencesFalse() {
+			window.VWO = window.VWO || [];
+window.VWO.push(['optOutVisitor', {maintainExperiences: false }]);
+	}	
+	</script></p>	
+	p><button onclick="optInApi()">OPTIN</button><script>
+			function optInApi() {
+				window.VWO = window.VWO || [];VWO.push(['optInVisitor'])
+		}	
+		</script></p>
 
 <p id="p1">Few Buttons</p>
 
