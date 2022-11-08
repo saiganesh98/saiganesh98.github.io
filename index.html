@@ -141,6 +141,11 @@ id="contactUsForm"
 	</div>
 	
 
+	<p><button onclick="optOutApi()">OPTOUT</button><script>
+		function optOutApi() {
+			window.VWO = window.VWO || [];VWO.push(['optOutVisitor'])
+		}	
+		</script></p>
 
 <p id="p1">Few Buttons</p>
 
