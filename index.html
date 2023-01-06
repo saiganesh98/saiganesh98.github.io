@@ -313,6 +313,29 @@ function myFunction() {
 
 <p></p>
 
+
+<script>
+	function fireEvent(eventName ){
+	// Do not change anything in the following two lines
+	window.VWO = window.VWO || [];
+	VWO.event = VWO.event || function () {VWO.push(["event"].concat([].slice.call(arguments)))};
+
+	// Replace the property values with your actual values
+	VWO.event(eventName, {
+		"price": "123"
+	});
+}
+
+function fireAttribute(attributeName){
+
+		// Do not change anything in the following two lines
+		window.VWO = window.VWO || [];
+	VWO.visitor = VWO.visitor || function () {VWO.push(["visitor"].concat([].slice.call(arguments)))};
+
+	// Replace <boolean_value> with your actual attribute value
+	VWO.visitor({ attributeName: false });
+}
+</script>
 <p><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></p>
 </body>
 </html>
