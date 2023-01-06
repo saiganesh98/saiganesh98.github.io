@@ -333,7 +333,7 @@ function fireAttribute(attributeName){
 	VWO.visitor = VWO.visitor || function () {VWO.push(["visitor"].concat([].slice.call(arguments)))};
 
 	// Replace <boolean_value> with your actual attribute value
-	VWO.visitor({ attributeName: 'test' });
+	VWO.visitor({ [attributeName]: 'test' });
 }
 </script>
 <p><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></p>
