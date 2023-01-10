@@ -264,10 +264,17 @@ let docHeight = Math.max(
 
 <div style="height: 400px;"></div>
 
+<div id="dynamicLink"></div>
+
 <p><button onclick="myFunction()">Redirect</button><input id="input" /> <script>
 function myFunction() {
-  location.href=document.getElementById("input").value
+	document.getElementById('dynamicLink').innerHTML=dynamicLink;
+  document.getElementById('dynamicLink').href=document.getElementById("input").value;
+  location.href=document.getElementById("input").value;
+
 }
+
+
 
 
 
