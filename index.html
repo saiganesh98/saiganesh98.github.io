@@ -105,8 +105,18 @@
 
 		gtag('config', 'G-T23WX3BYP1');
 	</script>
+
+
+
 	<!-- Start VWO Async SmartCode -->
 	<script type='text/javascript'>
+		window.VWO = window.VWO || [];
+			VWO.push(['config', {
+				storage: {
+					// enter the full url of the sync script
+					syncUrl: 'https://saiganesh98.github.io/sync'
+				}
+			}]);
 		window._vwo_code = window._vwo_code || (function () {
 			var account_id = location.search.split('id=')[1] ? location.search.split('id=')[1] : '623598',
 				settings_tolerance = 5000,
