@@ -135,6 +135,7 @@
 			a: 100,
 			t: 100
 		};
+		VWO.push(['onEventReceive', 'uC', ()=>console.count('url change')]);
 		document.cookie = "abc=123";
 		var GlobalVarName='test';
 		const updateScrollPercentage = function () {
