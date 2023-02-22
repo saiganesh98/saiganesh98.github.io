@@ -359,11 +359,10 @@ const para = document.createElement("p");
 para.setAttribute('id','dynElmen');
 para.innerText = "This is a paragraph";
 
+const fixEl=document.getElementById("clickonlink5")
 // Append to body:
-document.body.appendChild(para);
-document.body.appendChild(para);
-document.body.appendChild(para);
-document.body.appendChild(para);
+// document.body.appendChild(para);
+fixEl.after(para)
 
 
 }, 10000);
