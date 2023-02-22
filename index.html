@@ -336,7 +336,7 @@
 			<div class="css-1ck5e89"></div>
 		</div><span class="css-1eh9cgh">Shop Now</span>
 	</button>
-	<div class="hideEl" id="hideEl1" style="display: none">displayElementAfterFewSecs</div>
+	<!-- <div class="hideEl" id="hideEl1" style="display: none">displayElementAfterFewSecs</div> -->
 
 	<!-- 
  <iframe  src="https://www.youtube.com/embed/s6PKfhWsVV4">
@@ -345,13 +345,27 @@
  -->
 	<script>
 
-setTimeout(() => {
-  const el = document.getElementById('hideEl1');
+// setTimeout(() => {
+//   const el = document.getElementById('hideEl1');
 
-  el.style.display = 'block';
+//   el.style.display = 'block';
+
+
+// }, 10000);
+
+setTimeout(() => {
+// Create element:
+const para = document.createElement("p");
+para.setAttribute('id','dynElmen');
+para.innerText = "This is a paragraph";
+
+// Append to body:
+document.body.appendChild(para);
 
 
 }, 10000);
+
+
 
 
 		function fireEvent(eventName) {
