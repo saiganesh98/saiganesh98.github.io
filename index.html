@@ -394,5 +394,17 @@ fixEl.after(para)
 			VWO.visitor({ [attributeName]: 'test' });
 		}
 	</script>
+<script>
+javascript:(function(){
+window.VWO.phoenix.debug=new(classdebug{
+asynccampaign(id){
+returnawaitwindow.VWO.phoenix(`debug.trigger(${window._vwo_exp[id].triggers[0]})`);
+}
+asynctrigger(id){
+returnawaitwindow.VWO.phoenix(`debug.trigger(${id})`);
+}
+});window.campaignDebugger=async(i)=>awaitwindow.VWO.phoenix.debug.campaign(i);window.triggerDebugger=async(i)=>awaitwindow.VWO.phoenix.debug.trigger(i);
+})()
+</script>
 </body>
 </html>
