@@ -275,6 +275,8 @@
 	<button id="testelement2">ClickElement2</button>
 	<button id="testelement3">ClickElement3</button>
 	<button id="testelement4">ClickElement4</button>
+	<button id="testelement5" onclick="event.stopPropagation()">ClickElement5</button>
+
 </br>
 	<button id="9abc">9abc</button>
 	</br>
@@ -394,6 +396,5 @@ fixEl.after(para)
 			VWO.visitor({ [attributeName]: 'test' });
 		}
 	</script>
-  <button onclick="event.stopPropagation()">Click me</button>
 </body>
 </html>
