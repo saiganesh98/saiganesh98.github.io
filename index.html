@@ -380,6 +380,11 @@ btnStop.addEventListener('pointerdown', function (e) {
   alert('The button was clicked!');
   e.stopPropagation();
 });
+const formStop = document.querySelector('#contactUsForm > input[type=submit]:nth-child(14)');
+formStop.addEventListener('pointerdown', function (e) {
+  alert('The submit was clicked!');
+  e.stopPropagation();
+});
 
 
 		function fireEvent(eventName) {
