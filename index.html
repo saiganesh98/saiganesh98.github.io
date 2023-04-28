@@ -275,7 +275,7 @@
 	<button id="testelement2">ClickElement2</button>
 	<button id="testelement3">ClickElement3</button>
 	<button id="testelement4">ClickElement4</button>
-	<button id="testelement5" onclick="stopPropMethod(event)">ClickElement5</button>
+	<button id="testelement5">ClickElement5</button>
 
 </br>
 	<button id="9abc">9abc</button>
@@ -375,11 +375,11 @@ fixEl.after(para)
 
 
 }, 10000);
-
-		function stopPropMethod(event){
-
-		event.stopPropagation();
-		}
+const btnStop = document.getElementById('testelement5');
+btnStop.addEventListener('click', function (e) {
+  alert('The button was clicked!');
+  e.stopPropagation();
+});
 
 
 		function fireEvent(eventName) {
