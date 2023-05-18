@@ -113,7 +113,14 @@
 		/* eslint-disable no-undef */
 window._vwo_code=window._vwo_code ||
 (function () {
-var account_id=location.search.split('id=')[1] ? location.search.split('id=')[1] : '623598', // replace 1 with ${accountId} in release string
+	
+	const params = new URLSearchParams(window.location.search);
+      const accId = parseInt(params.get("id"));
+      const accountId = accId || 623598;
+      console.log("Account-Id ->", accountId);
+			
+			var account_id = accountId,
+ // replace 1 with ${accountId} in release string
 version=2.0,
 settings_tolerance=2000,
 hide_element='body',
