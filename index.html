@@ -118,7 +118,12 @@
 				}
 			}]);
 		window._vwo_code = window._vwo_code || (function () {
-			var account_id = location.search.split('id=')[1] ? location.search.split('id=')[1] : '623598',
+const params = new URLSearchParams(window.location.search);
+      const accId = parseInt(params.get("id"));
+      const accountId = accId || 623598;
+      console.log("Account-Id ->", accountId);
+			
+			var account_id = accountId,
 				settings_tolerance = 5000,
 				library_tolerance = 5000,
 				use_existing_jquery = false,
