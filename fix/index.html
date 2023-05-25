@@ -106,7 +106,56 @@
 		gtag('config', 'G-T23WX3BYP1');
 	</script>
 
+ <script>
+(function(nonVWOScriptsToExecute, VWO_HARD_TIMEOUT) {
+  window._vwo_evq = window._vwo_evq || [];
+  var queue = window._vwo_evq;
+  for (var i = 0; i < queue.length; i++) {
+    if (queue[i][0] === 'rD') {
+      window.willRedirectionOccur = true;
+      break;
+    }
+  }
+  var _vwoOldPush = window._vwo_evq.push;
+  window._vwo_evq.push = function() {
+    var eventData = arguments[0],
+      willRedirectionOccur;
+    if (eventData[0] === 'rD') {
+      willRedirectionOccur = eventData[1];
+      // It will be set to true if a redirection is going to be done by VWO.
+      window.willRedirectionOccurByVWO = willRedirectionOccur;
+    }
+    _vwoOldPush.apply(window._vwo_evq, [].slice.call(arguments));
+  };
+  var hardLimitTimedout = false;
 
+  function tryNonVWOTracking(nonVWOScriptsToExecute) {
+    if ((window._vwo_code && window._vwo_code.finished())|| window.vwo_libExecuted || hardLimitTimedout) {
+	    console.log(window.vwo_libExecuted);
+	    console.log(hardLimitTimedout);
+      if (!window.willRedirectionOccurByVWO) {
+        clearTimeout(hardLimitTimer);
+        for (var i = 0; i < nonVWOScriptsToExecute.length; i++) {
+          try {
+            nonVWOScriptsToExecute[i]();
+          } catch (e) {}
+        }
+        return;
+      }
+    }
+    setTimeout(function() {
+      tryNonVWOTracking(nonVWOScriptsToExecute)
+    }, 500)
+  }
+
+  var hardLimitTimer = setTimeout(function() {
+    hardLimitTimedout = true;
+  }, VWO_HARD_TIMEOUT);
+  tryNonVWOTracking(nonVWOScriptsToExecute);
+})([function() {
+ console.log("Execute GA code");
+}], 5 /*MAXIMUM TIME IN SECONDS IN WHICH GA CODE WILL EXECUTE ANYWAY*/ );
+   </script>
 
 	<!-- Start VWO Async SmartCode -->
 	<script type='text/javascript'>
