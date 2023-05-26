@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style type="text/css">
+		.feedBackForm::placeholder {
+			font-family: 'Apple Chancery';
+		}
+		input,
+		button {
+			font-family: 'Apple Chancery';
+		}
+		#contact_us,
+		#history,
+		#about,
+		#live_chat,
+		#suggestions {
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+			width: 40%;
+			border: 2px outset black;
+			background-color: white;
+			text-align: center;
+			color: black;
+			text-decoration: none;
+			border-radius: 100px;
+			box-sizing: border-box;
+			padding: 10px;
+			font-size: 20px;
+		}
+		#contact_us,
+		#history,
+		#about,
+		#live_chat,
+		#suggestions::value {
+			font-family: 'Apple Chancery';
+		}
+		a:link {
+			color: black;
+			background-color: transparent;
+		}
+		a:visited {
+			color: pink;
+			background-color: transparent;
+			text-decoration: none;
+		}
+		a:hover {
+			color: red;
+			background-color: transparent;
+			text-decoration: underline;
+		}
+		a:active {
+			color: yellow;
+			background-color: transparent;
+			text-decoration: underline;
+		}
+		body {
+			margin: 0;
+			padding: 0;
+			overflow-x: hidden;
+			font-family: 'Apple Chancery';
+		}
+		#scroll-percent {
+			position: fixed;
+			top: 0;
+			width: 100vw;
+			color: #000;
+			margin: 0;
+			padding: 0;
+		}
+		#percentage-value {
+			position: fixed;
+			top: 75%;
+			left: 95%;
+			transform: translateX(-50%);
+			height: 150px;
+			width: 150px;
+			color: #FB3C3F;
+			background-color: white;
+			text-align: center;
+			line-height: 150px;
+			border-radius: 50%;
+			box-shadow: 1px 1px 8px 2px #FB3C3F, -1px -1px 8px 2px #FB3C3F;
+			font-size: 3em;
+			z-index: 1;
+		}
+		[data-scrollPercentage] .percentage {
+			display: inline-block;
+			background-color: #FB3C3F;
+			height: 30px;
+			width: 0;
+		}
+	</style>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>My Website</title>
+	<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script src="https://www.googleoptimize.com/optimize.js?id=OPT-5XGQ5RW"></script>
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-T23WX3BYP1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'G-T23WX3BYP1');
+	</script>
+
+ <script>
+(function(nonVWOScriptsToExecute, VWO_HARD_TIMEOUT) {
+  window._vwo_evq = window._vwo_evq || [];
+  var queue = window._vwo_evq;
+  for (var i = 0; i < queue.length; i++) {
+    if (queue[i][0] === 'rD') {
+      window.willRedirectionOccur = true;
+      break;
+    }
+  }
+  var _vwoOldPush = window._vwo_evq.push;
+  window._vwo_evq.push = function() {
+    var eventData = arguments[0],
+      willRedirectionOccur;
+    if (eventData[0] === 'rD') {
+      willRedirectionOccur = eventData[1];
+      // It will be set to true if a redirection is going to be done by VWO.
+      window.willRedirectionOccurByVWO = willRedirectionOccur;
+    }
+    _vwoOldPush.apply(window._vwo_evq, [].slice.call(arguments));
+  };
+  var hardLimitTimedout = false;
+
+  function tryNonVWOTracking(nonVWOScriptsToExecute) {
+    if ((window._vwo_code && window._vwo_code.finished())|| window.vwo_libExecuted || hardLimitTimedout) {
+	    console.log('libExecuted value: '+window.vwo_libExecuted);
+	    console.log('Hard time out value : '+hardLimitTimedout);
+	    console.log('redirection occur by VWO value: '+ window.willRedirectionOccurByVWO);
+      if (!window.willRedirectionOccurByVWO) {
+        clearTimeout(hardLimitTimer);
+        for (var i = 0; i < nonVWOScriptsToExecute.length; i++) {
+          try {
+            nonVWOScriptsToExecute[i]();
+          } catch (e) {}
+        }
+        return;
+      }
+    }
+    setTimeout(function() {
+      tryNonVWOTracking(nonVWOScriptsToExecute)
+    }, 500)
+  }
+
+  var hardLimitTimer = setTimeout(function() {
+    hardLimitTimedout = true;
+  }, VWO_HARD_TIMEOUT);
+  tryNonVWOTracking(nonVWOScriptsToExecute);
+})([function() {
+ console.log("Execute GA code: non VWO scripts");
+}], 500000000 /*MAXIMUM TIME IN SECONDS IN WHICH GA CODE WILL EXECUTE ANYWAY*/ );
+   </script>
+
+	<!-- Start VWO Async SmartCode -->
+  <script src="https://dev.visualwebsiteoptimizer.com/lib/1000081.js" id="vwoCode"></script>
+	<script type='text/javascript'>
+		_vwo_pc_custom = {
+			a: 100,
+			t: 100
+		};
+		// VWO.push(['onEventReceive', 'uC', ()=>console.count('url change')]);
+		document.cookie = "abc=123";
+		var GlobalVarName='test';
+		const updateScrollPercentage = function () {
+			const heightOfWindow = window.innerHeight,
+				contentScrolled = window.pageYOffset,
+				bodyHeight = Math.max(
+					document.body.scrollHeight, document.documentElement.scrollHeight,
+					document.body.offsetHeight, document.documentElement.offsetHeight,
+					document.body.clientHeight, document.documentElement.clientHeight
+				);
+			percentage = document.querySelector("[data-scrollPercentage] .percentage")
+			percentageVal = document.querySelector("#percentage-value")
+			if (bodyHeight - contentScrolled <= heightOfWindow) {
+				percentageVal.textContent = percentage.style.width = "100%"
+			}
+			else {
+				const total = bodyHeight - heightOfWindow,
+					got = contentScrolled,
+					percent = parseInt((got / total) * 100)
+				percentageVal.textContent = percentage.style.width = percent + "%"
+			}
+		}
+		window.addEventListener('scroll', updateScrollPercentage)
+	</script><!-- End VWO Async SmartCode -->
+	<script type="text/javascript">(function(){window._vwo_evq=window._vwo_evq||[];var _vwoOldPush=window._vwo_evq.push;var processEvent=function(){var eventData=arguments[0];if((eventData[0]==='rH')||(eventData[0]==='vS')){console.log(eventData[0]+' : '+eventData[1]+' ('+_vwo_exp[eventData[1]].type+') '+':'+eventData[1]+'-'+eventData[2]);}else if(eventData[0]==='uC'){console.log('url changed');}else if(eventData[0]==='submit'){console.log(eventData[0]);}};for(var i=0;i<window._vwo_evq.length;i++){processEvent(window._vwo_evq[i]);}window._vwo_evq.push=function(){processEvent.apply(this,[].slice.call(arguments));_vwoOldPush.apply(window._vwo_evq,[].slice.call(arguments));};})();</script>
+</head>
+<body>
+	<div class="div1">
+		<h2 id="WelMsg">Welcome to the website, Best content is brought to you in this page</h2>
+		<p id="Welpara">Let&#39;s start now, just try to scroll down slowly and enjoy the experience</p>
+	</div>
+	<p id="p1"><strong>CONTACT US FORM</strong></p>
+	<div>
+		<form action="contact_us1.html" id="contactUsForm"><label for="fname">First name:</label><br />
+			<input id="fname" name="fname" type="text" onchange="udpateAttribute()" value="Wingify" /><br />
+			<label for="lname">Last name:</label><br />
+			<input id="lname" name="lname" type="text" value="VWO" /><br />
+			<label for="email">Email:</label><br />
+			<input id="email" name="email" type="text" value="vwo@gmail.com" /><br />
+			<br />
+			<input type="submit" value="Submit" />
+		</form>
+	</div>
+	<form action="contact_us2.html" id="contactUsForm2"><label for="fname">First name:</label><br />
+		<input id="fname" name="fname" type="text" onchange="udpateAttribute()" value="jslib" /><br />
+		<label for="lname">Last name:</label><br />
+		<input id="lname" name="lname" type="text" value="dacdn" /><br />
+		<label for="email">Email:</label><br />
+		<input id="email" name="email" type="text" value="wingify@gmail.com" /><br />
+		<br />
+		<input type="submit" value="Submit" />
+	</form>
+	</div>
+	<p><button onclick="optOutApi()">OPTOUT</button>
+		<script>
+			function optOutApi() {
+				window.VWO = window.VWO || []; VWO.push(['optOutVisitor'])
+			}	
+		</script>
+	</p>
+	<p><button onclick="optOutApiExperiencesTrue()">OPTOUTWithExperiencesTrue</button>
+		<script>
+			function optOutApiExperiencesTrue() {
+				window.VWO = window.VWO || [];
+				window.VWO.push(['optOutVisitor', { maintainExperiences: true }]);
+			}	
+		</script>
+	</p>
+	<p><button onclick="optOutApiExperiencesFalse()">OPTOUTWithExperiencesFalse</button>
+		<script>
+			function optOutApiExperiencesFalse() {
+				window.VWO = window.VWO || [];
+				window.VWO.push(['optOutVisitor', { maintainExperiences: false }]);
+			}	
+		</script>
+	</p>
+	<p><button onclick="optInApi()">OPTIN</button>
+		<script>
+			function optInApi() {
+				window.VWO = window.VWO || []; VWO.push(['optInVisitor'])
+			}	
+		</script>
+	</p>
+	<p id="p1">Few Buttons</p>
+	<p><br />
+		<a href="suggestions.html" id="suggestions">Suggestions</a><br />
+		<br />
+		<br />
+		<br />
+		<a href="contact_us.html" id="contact_us">Contact us</a><br />
+		<br />
+		<br />
+		<br />
+		<a href="livechat.html" id="live_chat">Live chat</a><br />
+		<br />
+		<br />
+		<br />
+		<a href="history.html" id="history">History</a><br />
+		<br />
+		<br />
+		<br />
+		<a href="about.html" id="about">About</a>
+	</p>
+	<p></p>
+	<p></p>
+	<p></p>
+	<p></p>
+	<p id="p1"><strong>FEEDBACK-FORM</strong></p>
+	<p></p>
+	<p></p>
+	<p></p>
+	<p></p>
+	<div>
+		<form action="feedback.html" id="feedbackForm"><label for="question">Tell us about how was your experience using
+				our website which would help us to provide better user experience??</label><br />
+			<br />
+			<br />
+			<input class='feedBackForm' id="answer" name="feedback"
+				placeholder="It was fantastic using the features present in the website" size="100"
+				style="height: 100px;" type="text" value="" /><br />
+			<br />
+			<input type="submit" value="Submit" />
+		</form>
+	</div>
+	<p></p>
+	<p></p>
+	<p id="p1"><strong>SPA BUTTON</strong></p>
+	<p><a href="javascript:void(0)" id="historyPush" onclick="history.pushState(null, 'test', 'spa/1.html')">SPA URL</a>
+	</p>
+	<a href="javascript:void(0)" onclick="location.hash='spa/1.html'">Change hash</a>
+	<p><a href="https://saiganesh98.github.io/" id="pageVisitMetric">clickonlinkPageVisit</a></p>
+	<p><a href="https://saiganesh98.github.io/?id=623598&amp;test=clickonLink" id="clickonlink1">clickonlink621087</a>
+	</p>
+	<p><a href="https://saiganesh98.github.io/?id=4000194&amp;test=clickonLink" id="clickonlink2">clickonlink4000194</a>
+	</p>
+	<button id="clickonlinkDummy">ClickElement</button>
+	<button id="testelement2">ClickElement2</button>
+	<button id="testelement3">ClickElement3</button>
+	<button id="testelement4">ClickElement4</button>
+	<button id="testelement5">ClickElement5</button>
+
+</br>
+	<button id="9abc">9abc</button>
+	</br>
+	<button class="1class">ClickElementclass</button>
+</br>
+	<button id=".1class1">ClickElementclass2</button>
+
+	<p><a href="https://mohitkhanna.wingified.com/?id=621087" id="clickonlink3">crossDomainClickOnLinkMohit621087</a>
+	</p>
+	<p><a href="https://mohitkhanna.wingified.com/?id=4000194" id="clickonlink4">crossDomainClickOnLinkMohit4000194</a>
+	</p>
+	<p><a href="https://mohitkhanna.wingified.com/?id=6001183" id="clickonlink5">crossDomainClickOnLinkMohit6001183</a>
+	</p>
+	<script>
+		const originalTitle = document.title;
+		window.addEventListener("scroll", () => {
+			let scrollTop = window.scrollY;
+			let docHeight = Math.max(
+				document.body.scrollHeight, document.documentElement.scrollHeight,
+				document.body.offsetHeight, document.documentElement.offsetHeight,
+				document.body.clientHeight, document.documentElement.clientHeight
+			);
+			let winHeight = window.innerHeight;
+			let scrollPercent = scrollTop / (docHeight - winHeight);
+			let scrollPercentRounded = Math.round(scrollPercent * 100);
+			document.title = `(${scrollPercentRounded}%) ${originalTitle}`;
+		});
+	</script>
+	<div data-scrollpercentage="" id="scroll-percent">
+		<div class="percentage"></div>
+	</div>
+	<div id="percentage-value"></div>
+	<div style="height: 30px;"></div>
+	<a id="dynamicLink"></a>
+	<p><button onclick="myFunction()">Generate Link</button><input id="input" />
+		<script>
+			function myFunction() {
+				document.getElementById('dynamicLink').innerHTML = 'GENERATED LINK';
+				document.getElementById('dynamicLink').href = document.getElementById("input").value;
+				//   location.href=document.getElementById("input").value;
+			}
+			function udpateAttribute() {
+				console.log('entered update attribute method')
+				window.VWO = window.VWO || [];
+				VWO.visitor = VWO.visitor || function () { VWO.push(["visitor"].concat([].slice.call(arguments))) };
+				const x = document.getElementById('fname').value;
+				// Replace "<text_value>" with your actual property value
+				VWO.visitor({ "firstname2": x });
+			}
+		</script>
+	</p>
+	<p><button id='executeCodeSnippet'>ExecuteCode</button><input id="input2" />
+		<script>
+			document.getElementById('executeCodeSnippet').onclick = function () {
+				eval(document.getElementById('input2').value);
+			}
+		</script>
+	</p>
+	<button class="css-17k8lez">
+		<div class="css-13gatje">
+			<div class="css-1ck5e89"></div>
+		</div><span class="css-1eh9cgh">Shop Now</span>
+	</button>
+	<button class="css-17k8lez">
+		<div class="css-13gatje">
+			<div class="css-1ck5e89"></div>
+		</div><span class="css-1eh9cgh">Shop Now</span>
+	</button>
+	<!-- <div class="hideEl" id="hideEl1" style="display: none">displayElementAfterFewSecs</div> -->
+
+	<!-- 
+ <iframe  src="https://www.youtube.com/embed/s6PKfhWsVV4">
+</iframe>  -->
+	<!-- <object data='https://www.youtube.com/embed/s6PKfhWsVV4' width='560px' height='315px'>
+ -->
+	<script>
+
+// setTimeout(() => {
+//   const el = document.getElementById('hideEl1');
+
+//   el.style.display = 'block';
+
+
+// }, 10000);
+
+setTimeout(() => {
+// Create element:
+const para = document.createElement("p");
+para.setAttribute('id','dynElmen');
+para.innerText = "This is a paragraph";
+
+const fixEl=document.getElementById("clickonlink5")
+// Append to body:
+// document.body.appendChild(para);
+fixEl.after(para)
+
+
+}, 10000);
+const btnStop = document.getElementById('testelement5');
+btnStop.addEventListener('pointerdown', function (e) {
+  alert('The button was clicked!');
+  e.stopPropagation();
+});
+const formStop = document.querySelector('#contactUsForm > input[type=submit]:nth-child(14)');
+formStop.addEventListener('pointerdown', function (e) {
+  alert('The submit was clicked!');
+  e.stopPropagation();
+});
+
+
+		function fireEvent(eventName) {
+			// Do not change anything in the following two lines
+			window.VWO = window.VWO || [];
+			VWO.event = VWO.event || function () { VWO.push(["event"].concat([].slice.call(arguments))) };
+			// Replace the property values with your actual values
+			VWO.event(eventName, {
+				"price": "123"
+			});
+		}
+		function fireAttribute(attributeName) {
+			// Do not change anything in the following two lines
+			window.VWO = window.VWO || [];
+			VWO.visitor = VWO.visitor || function () { VWO.push(["visitor"].concat([].slice.call(arguments))) };
+			// Replace <boolean_value> with your actual attribute value
+			VWO.visitor({ [attributeName]: 'test' });
+		}
+		
+		function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i <ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+	</script>
+</body>
+</html>
