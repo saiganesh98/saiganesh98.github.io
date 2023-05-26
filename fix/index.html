@@ -108,6 +108,7 @@
 
  <script>
 (function(nonVWOScriptsToExecute, VWO_HARD_TIMEOUT) {
+	console.log('entered the function');
   window._vwo_evq = window._vwo_evq || [];
   var queue = window._vwo_evq;
   for (var i = 0; i < queue.length; i++) {
@@ -125,6 +126,7 @@
       // It will be set to true if a redirection is going to be done by VWO.
       window.willRedirectionOccurByVWO = willRedirectionOccur;
     }
+console.log('redirection occur at condition :' + window.willRedirectionOccurByVWO);	  
     _vwoOldPush.apply(window._vwo_evq, [].slice.call(arguments));
   };
   var hardLimitTimedout = false;
