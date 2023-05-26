@@ -133,6 +133,7 @@
     if ((window._vwo_code && window._vwo_code.finished())|| window.vwo_libExecuted || hardLimitTimedout) {
 	    console.log('libExecuted value: '+window.vwo_libExecuted);
 	    console.log('Hard time out value : '+hardLimitTimedout);
+	    console.log('redirection occur by VWO value: '+ window.willRedirectionOccurByVWO);
       if (!window.willRedirectionOccurByVWO) {
         clearTimeout(hardLimitTimer);
         for (var i = 0; i < nonVWOScriptsToExecute.length; i++) {
