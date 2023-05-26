@@ -126,7 +126,6 @@
       // It will be set to true if a redirection is going to be done by VWO.
       window.willRedirectionOccurByVWO = willRedirectionOccur;
     }
-console.log('redirection occur at condition :' + window.willRedirectionOccurByVWO);	  
     _vwoOldPush.apply(window._vwo_evq, [].slice.call(arguments));
   };
   var hardLimitTimedout = false;
