@@ -107,35 +107,6 @@
 	</script>
 
 
-
-<script >
-(function() {
-  window._vwo_evq = window._vwo_evq || [];
-  var _vwoOldPush = window._vwo_evq.push;
-  window._vwo_evq.push = function() {
-    var eventData = arguments[0],
-      willRedirectionOccur;
-    if (eventData[0] === 'rD') {
-      willRedirectionOccur = eventData[1]; // It will be set to true if a redirection is going to be done by VWO.
-
-      window.willRedirectionOccurByVWO = willRedirectionOccur;
-    }
-    _vwoOldPush.apply(window._vwo_evq, [].slice.call(arguments));
-  };
-})();	
-	
-  window.onbeforeunload = function() {
-    if (window.willRedirectionOccurByVWO) {
-      console.log('exit popup: rd=true')
-      return null;
-    } else {
-	console.log('exit popup: rd=false')
-
-      // Move Existing exit popup code Here to show popup in case visitor remains on control.
-    }
-  };
-</script>
-
 	<!-- Start VWO Async SmartCode -->
 	<script type='text/javascript'>
 		window.VWO = window.VWO || [];
