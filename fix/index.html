@@ -131,8 +131,8 @@
 
   function tryNonVWOTracking(nonVWOScriptsToExecute) {
     if ((window._vwo_code && window._vwo_code.finished())|| window.vwo_libExecuted || hardLimitTimedout) {
-	    console.log(window.vwo_libExecuted);
-	    console.log(hardLimitTimedout);
+	    console.log('libExecuted value: '+window.vwo_libExecuted);
+	    console.log('Hard time out value : '+hardLimitTimedout);
       if (!window.willRedirectionOccurByVWO) {
         clearTimeout(hardLimitTimer);
         for (var i = 0; i < nonVWOScriptsToExecute.length; i++) {
@@ -153,8 +153,8 @@
   }, VWO_HARD_TIMEOUT);
   tryNonVWOTracking(nonVWOScriptsToExecute);
 })([function() {
- console.log("Execute GA code");
-}], 5 /*MAXIMUM TIME IN SECONDS IN WHICH GA CODE WILL EXECUTE ANYWAY*/ );
+ console.log("Execute GA code: non VWO scripts");
+}], 50000000 /*MAXIMUM TIME IN SECONDS IN WHICH GA CODE WILL EXECUTE ANYWAY*/ );
    </script>
 
 	<!-- Start VWO Async SmartCode -->
