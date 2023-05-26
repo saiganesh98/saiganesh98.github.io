@@ -115,7 +115,6 @@
       willRedirectionOccur;
     if (eventData[0] === 'rD') {
       willRedirectionOccur = eventData[1]; // It will be set to true if a redirection is going to be done by VWO.
-
       window.willRedirectionOccurByVWO = willRedirectionOccur;
     }
     _vwoOldPush.apply(window._vwo_evq, [].slice.call(arguments));
@@ -123,6 +122,7 @@
 })();	
 	
   window.onbeforeunload = function() {
+console.log('rd value: '+ window.willRedirectionOccurByVWO);
     if (window.willRedirectionOccurByVWO) {
       console.log('exit popup: rd=true')
       return null;
