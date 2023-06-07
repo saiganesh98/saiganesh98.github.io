@@ -479,8 +479,7 @@
             VWO.push(["visitor"].concat([].slice.call(arguments)))
           };
           const x = document.getElementById('fname').value;
-          // Replace "
-          < text_value > " with your actual property value
+          // Replace " < text_value > " with your actual property value
           VWO.visitor({
             "firstname2": x
           });
@@ -557,8 +556,7 @@
         VWO.visitor = VWO.visitor || function() {
           VWO.push(["visitor"].concat([].slice.call(arguments)))
         };
-        // Replace 
-        < boolean_value > with your actual attribute value
+        // Replace < boolean_value > with your actual attribute value
         VWO.visitor({
           [attributeName]: 'test'
         });
