@@ -429,6 +429,9 @@
     <button id="testelement3">ClickElement3</button>
     <button id="testelement4">ClickElement4</button>
     <button id="testelement5">ClickElement5</button>
+    <button id="customURL" onclick="activateCustomURL()">customURL</button>
+    <button id="virtualURL" onclick="activateVirtualURL()">virtualURL</button>
+
     </br>
     <button id="9abc">9abc</button>
     </br>
@@ -577,6 +580,20 @@
         }
         return "";
       }
+    
+      function activateCustomURL(){
+window.VWO = window.VWO || [];
+window.VWO.push(['activate', {
+  customUrl: 'https://saiganesh98.github.io/?id=4000250&test=spaURL'
+}]);
+}
+      function activateVirtualURL(){
+window.VWO = window.VWO || [];
+window.VWO.push(['activate', {
+  virtualPageUrl: 'https://saiganesh98.github.io/?id=4000250&test=spaURL'
+}]);
+}
+
     </script>
   </body>
 </html>
