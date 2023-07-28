@@ -139,6 +139,7 @@
           use_existing_jquery = false,
           is_spa = 1,
           hide_element = 'body',
+hide_element_style='opacity:0 !important;filter:alpha(opacity=0) !important;background:none !important;  -webkit-transform:none;-ms-transform:none;transform:none;'
           /* DO NOT EDIT BELOW THIS LINE */
           f = false,
           d = document,
@@ -150,9 +151,9 @@
             library_tolerance: function() {
               return library_tolerance
             },
-            hide_element_style: function() {
-              return '{' + hide_element_style + '}'
-            },
+            // hide_element_style: function() {
+            //   return '{' + hide_element_style + '}'
+            // },
             finish: function() {
               if (!f) {
                 f = true;
