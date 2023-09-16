@@ -21,6 +21,7 @@
             color: #fff;
             padding: 20px 0;
             text-align: center;
+            position: relative;
         }
 
         h1 {
@@ -28,12 +29,25 @@
             margin: 0;
             text-transform: uppercase;
             letter-spacing: 2px;
+            animation: fadeInUp 1s ease 1s forwards;
         }
 
         h2 {
             font-size: 24px;
             margin: 10px 0;
             font-weight: normal;
+            animation: fadeInUp 1s ease 1.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Main Content Styles */
@@ -129,6 +143,18 @@
             height: auto;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            animation: zoomIn 1s ease 2s forwards;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         /* Sidebar Menu Styles */
@@ -200,6 +226,7 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: none;
         }
 
         .question h2 {
@@ -224,6 +251,33 @@
 
         .question button:hover {
             background-color: #006400;
+        }
+
+        .question.active {
+            display: block;
+        }
+
+        /* Photo Gallery Styles */
+        .photo-gallery {
+            margin-top: 30px;
+        }
+
+        .photo {
+            margin: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .photo:hover {
+            transform: scale(1.1);
+        }
+
+        .photo img {
+            max-width: 100%;
+            height: auto;
         }
     </style>
 </head>
@@ -266,23 +320,23 @@
         </div>
 
         <!-- Question Flow -->
-        <div class="question-flow" id="questionFlow" style="display: none;">
+        <div class="question-flow" id="questionFlow">
             <div class="question" id="question1">
                 <h2>Question 1</h2>
                 <p>What's your favorite photography style?</p>
                 <button onclick="nextQuestion('question2')">Next</button>
             </div>
-            <div class="question" id="question2" style="display: none;">
+            <div class="question" id="question2">
                 <h2>Question 2</h2>
                 <p>Which camera do you prefer for outdoor photography?</p>
                 <button onclick="nextQuestion('question3')">Next</button>
             </div>
-            <div class="question" id="question3" style="display: none;">
+            <div class="question" id="question3">
                 <h2>Question 3</h2>
                 <p>What's your favorite time of day to capture photos?</p>
                 <button onclick="nextQuestion('question4')">Next</button>
             </div>
-            <div class="question" id="question4" style="display: none;">
+            <div class="question" id="question4">
                 <h2>Question 4</h2>
                 <p>Do you have any photography tips for beginners?</p>
                 <button onclick="restartQuestionFlow()">Restart</button>
@@ -302,7 +356,21 @@
         <div class="exciting-components">
             <h2>Explore Exciting Moments</h2>
             <button class="exciting-button">View Portfolio</button>
-            <img src="exciting-image.jpg" alt="Exciting Image" class="exciting-image">
+            <img src="https://via.placeholder.com/400" alt="Exciting Image" class="exciting-image">
+        </div>
+
+        <!-- Photo Gallery -->
+        <div class="photo-gallery">
+            <h2>Photo Gallery</h2>
+            <div class="photo">
+                <img src="https://via.placeholder.com/300" alt="Photo 1">
+            </div>
+            <div class="photo">
+                <img src="https://via.placeholder.com/300" alt="Photo 2">
+            </div>
+            <div class="photo">
+                <img src="https://via.placeholder.com/300" alt="Photo 3">
+            </div>
         </div>
     </main>
     <footer>
