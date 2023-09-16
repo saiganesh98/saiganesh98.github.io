@@ -5,16 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sai Ganesh - Photographer</title>
     <style>
-        /* Your existing CSS styles here */
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+        }
 
-        /* Additional Styles */
-        .contact-form {
-            margin-top: 30px;
+        /* Header Styles */
+        header {
+            background-color: #008000;
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin: 10px 0;
+            font-weight: normal;
+        }
+
+        /* Main Content Styles */
+        main {
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
             background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        /* Contact Form Styles */
+        .contact-form {
+            background-color: #fff;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
+
+        label {
+            font-weight: bold;
+        }
+
         input[type="text"],
         input[type="email"],
         textarea {
@@ -24,17 +66,20 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
+
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px 0;
             background-color: #008000;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-right: 10px;
+            margin-top: 10px;
         }
-        .btn:hover {
+
+        button[type="submit"]:hover {
             background-color: #006400;
         }
 
@@ -49,6 +94,40 @@
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
+
+        /* Exciting Components Styles */
+        .exciting-components {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .exciting-components h2 {
+            font-size: 32px;
+            margin: 20px 0;
+        }
+
+        .exciting-button {
+            background-color: #ff4500;
+            color: #fff;
+            padding: 15px 30px;
+            font-size: 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .exciting-button:hover {
+            background-color: #e53935;
+        }
+
+        .exciting-image {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -57,7 +136,9 @@
         <h2>Passionate Photographer Capturing Life's Moments</h2>
     </header>
     <main>
-        <!-- Your existing main content here -->
+        <!-- About Me -->
+        <h2>About Me</h2>
+        <p>Welcome to my world of photography! I'm Sai Ganesh, a dedicated photographer on a mission to capture life's most beautiful moments through my lens. I believe that every image tells a unique story, and I'm here to share those stories with you.</p>
 
         <!-- Contact Form -->
         <div class="contact-form">
@@ -72,7 +153,7 @@
                 <label for="message">Message:</label>
                 <textarea id="message" name="message" rows="4" required></textarea>
 
-                <button type="submit" class="btn">Send</button>
+                <button type="submit">Send</button>
             </form>
         </div>
 
@@ -83,6 +164,13 @@
             <button id="changeUrlBtn" class="btn">Change URL</button>
             <button id="addHashBtn" class="btn">Add Hash</button>
             <button id="changeUIBtn" class="btn">Change UI</button>
+        </div>
+
+        <!-- Exciting Components -->
+        <div class="exciting-components">
+            <h2>Explore Exciting Moments</h2>
+            <button class="exciting-button">View Portfolio</button>
+            <img src="exciting-image.jpg" alt="Exciting Image" class="exciting-image">
         </div>
     </main>
     <footer>
