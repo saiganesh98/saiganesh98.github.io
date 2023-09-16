@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sai Ganesh - Photographer</title>
+    <style>
+        /* Your existing CSS styles here */
+
+        /* Additional Styles */
+        .contact-form {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        input[type="text"],
+        input[type="email"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #008000;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .btn:hover {
+            background-color: #006400;
+        }
+
+        /* Scroll Percentage Widget Styles */
+        #scrollPercentageWidget {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #008000;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Sai Ganesh</h1>
+        <h2>Passionate Photographer Capturing Life's Moments</h2>
+    </header>
+    <main>
+        <!-- Your existing main content here -->
+
+        <!-- Contact Form -->
+        <div class="contact-form">
+            <h2>Contact Me</h2>
+            <form>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+
+                <button type="submit" class="btn">Send</button>
+            </form>
+        </div>
+
+        <!-- Useful Links and Buttons -->
+        <div class="useful-links">
+            <h2>Useful Links</h2>
+            <a href="https://example.com" target="_blank" class="btn">Visit Example.com</a>
+            <button id="changeUrlBtn" class="btn">Change URL</button>
+            <button id="addHashBtn" class="btn">Add Hash</button>
+            <button id="changeUIBtn" class="btn">Change UI</button>
+        </div>
+    </main>
+    <footer>
+        &copy; 2023 Sai Ganesh - Photographer
+    </footer>
+
+    <!-- JavaScript for Button Actions and Scroll Percentage Indicator -->
+    <script>
+        // Function to change the URL without reloading the website
+        function changeURL() {
+            window.history.pushState({}, '', '/new-url');
+        }
+
+        // Function to add a hash to the current URL in the browser
+        function addHash() {
+            window.location.hash = 'newhash';
+        }
+
+        // Function to change the UI without reloading the page
+        function changeUI() {
+            // Example: Change background color on button click
+            document.body.style.backgroundColor = '#f4f4f4';
+        }
+
+        // Event listeners for button clicks
+        document.getElementById('changeUrlBtn').addEventListener('click', changeURL);
+        document.getElementById('addHashBtn').addEventListener('click', addHash);
+        document.getElementById('changeUIBtn').addEventListener('click', changeUI);
+
+        // Function to update the scroll percentage indicator
+        function updateScrollPercentage() {
+            const scrollTop = window.scrollY;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercentage = (scrollTop / scrollHeight) * 100;
+            document.title = `Scroll: ${scrollPercentage.toFixed(2)}%`;
+
+            // Update the widget
+            document.getElementById('scrollPercentageWidget').innerText = `Scroll: ${scrollPercentage.toFixed(2)}%`;
+        }
+
+        // Event listener for scroll
+        window.addEventListener('scroll', updateScrollPercentage);
+
+        // Initialize the scroll percentage on page load
+        window.addEventListener('load', updateScrollPercentage);
+    </script>
+</body>
+</html>
