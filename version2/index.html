@@ -49,7 +49,7 @@
 
         /* Contact Form Styles */
         .contact-form {
-            background-color: #fff;
+            background-color: #f4f4f4;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -189,6 +189,42 @@
         .menu-item a:hover {
             text-decoration: underline;
         }
+
+        /* Question Flow Styles */
+        .question-flow {
+            margin-top: 30px;
+        }
+
+        .question {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .question h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .question p {
+            font-size: 18px;
+        }
+
+        .question button {
+            background-color: #008000;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .question button:hover {
+            background-color: #006400;
+        }
     </style>
 </head>
 <body>
@@ -212,8 +248,25 @@
         <h2>Passionate Photographer Capturing Life's Moments</h2>
     </header>
     <main>
+        <!-- Contact Form -->
+        <div class="contact-form" id="contactForm">
+            <h2>Contact Me</h2>
+            <form>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+
+                <button type="submit">Send</button>
+            </form>
+        </div>
+
         <!-- Question Flow -->
-        <div class="question-flow">
+        <div class="question-flow" id="questionFlow" style="display: none;">
             <div class="question" id="question1">
                 <h2>Question 1</h2>
                 <p>What's your favorite photography style?</p>
@@ -232,25 +285,8 @@
             <div class="question" id="question4" style="display: none;">
                 <h2>Question 4</h2>
                 <p>Do you have any photography tips for beginners?</p>
-                <button onclick="nextQuestion('question1')">Restart</button>
+                <button onclick="restartQuestionFlow()">Restart</button>
             </div>
-        </div>
-
-        <!-- Contact Form -->
-        <div class="contact-form" id="contactForm" style="display: none;">
-            <h2>Contact Me</h2>
-            <form>
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" rows="4" required></textarea>
-
-                <button type="submit">Send</button>
-            </form>
         </div>
 
         <!-- Useful Links and Buttons -->
@@ -324,10 +360,17 @@
 
         // Question Flow Functionality
         let currentQuestion = 1;
+
         function nextQuestion(questionId) {
             document.getElementById(`question${currentQuestion}`).style.display = 'none';
-            currentQuestion = questionId.substring(8);
+            currentQuestion = parseInt(questionId.substring(8));
             document.getElementById(questionId).style.display = 'block';
+        }
+
+        function restartQuestionFlow() {
+            document.getElementById(`question${currentQuestion}`).style.display = 'none';
+            currentQuestion = 1;
+            document.getElementById('question1').style.display = 'block';
         }
     </script>
 </body>
