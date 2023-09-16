@@ -13,6 +13,7 @@
             padding: 0;
             background-color: #f0f0f0;
             color: #333;
+            overflow: hidden; /* Hide overflow to create the cursor bubble effect */
         }
 
         /* Header Styles */
@@ -21,7 +22,12 @@
             color: #fff;
             padding: 20px 0;
             text-align: center;
-            position: relative;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            animation: fadeInDown 1s ease 1s forwards;
         }
 
         h1 {
@@ -29,36 +35,22 @@
             margin: 0;
             text-transform: uppercase;
             letter-spacing: 2px;
-            animation: fadeInUp 1s ease 1s forwards;
         }
 
         h2 {
             font-size: 24px;
             margin: 10px 0;
             font-weight: normal;
-            animation: fadeInUp 1s ease 1.5s forwards;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         /* Main Content Styles */
         main {
             max-width: 800px;
-            margin: 0 auto;
+            margin: 100px auto 20px;
             padding: 20px;
             background-color: #fff;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            position: relative;
         }
 
         /* Contact Form Styles */
@@ -93,56 +85,50 @@
             border-radius: 5px;
             cursor: pointer;
             margin-top: 10px;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
         }
 
         button[type="submit"]:hover {
             background-color: #006400;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* Scroll Percentage Widget Styles */
-        #scrollPercentageWidget {
+        /* Scroll Progress Bar Styles */
+        #progress-container {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #ddd;
+            z-index: 999;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0;
             background-color: #008000;
-            color: #fff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        /* Exciting Components Styles */
-        .exciting-components {
-            margin-top: 30px;
-            text-align: center;
+        /* Animation for Header */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .exciting-components h2 {
-            font-size: 32px;
-            margin: 20px 0;
-        }
-
-        .exciting-button {
-            background-color: #ff4500;
-            color: #fff;
-            padding: 15px 30px;
-            font-size: 20px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .exciting-button:hover {
-            background-color: #e53935;
-        }
-
+        /* Animation for Exciting Image */
         .exciting-image {
-            margin-top: 20px;
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: scale(0.8);
             animation: zoomIn 1s ease 2s forwards;
         }
 
@@ -157,63 +143,25 @@
             }
         }
 
-        /* Sidebar Menu Styles */
-        .sidebar {
-            position: fixed;
-            left: -250px;
-            top: 0;
-            bottom: 0;
-            width: 250px;
-            background-color: #333;
-            overflow-y: auto;
-            transition: left 0.3s;
-        }
-
-        .sidebar.active {
-            left: 0;
-        }
-
-        .menu-btn {
+        /* Cursor Bubble Effect */
+        .cursor-bubble {
             position: absolute;
-            left: 15px;
-            top: 15px;
-            cursor: pointer;
-            z-index: 2;
-        }
-
-        .menu-btn .btn-lines {
-            background-color: #fff;
-            width: 25px;
-            height: 3px;
-            margin: 4px 0;
-            transition: transform 0.3s, background-color 0.3s;
-        }
-
-        .menu-btn.active .btn-lines {
-            transform: rotate(45deg);
+            width: 10px;
+            height: 10px;
             background-color: #008000;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: bubble 3s infinite ease-in-out;
         }
 
-        .menu-btn.active .btn-lines:nth-child(2) {
-            transform: rotate(-45deg);
-        }
-
-        .menu-content {
-            padding: 20px;
-        }
-
-        .menu-item {
-            margin-bottom: 20px;
-        }
-
-        .menu-item a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 18px;
-        }
-
-        .menu-item a:hover {
-            text-decoration: underline;
+        @keyframes bubble {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
         }
 
         /* Question Flow Styles */
@@ -226,7 +174,6 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            display: none;
         }
 
         .question h2 {
@@ -253,51 +200,70 @@
             background-color: #006400;
         }
 
-        .question.active {
-            display: block;
-        }
-
-        /* Photo Gallery Styles */
-        .photo-gallery {
-            margin-top: 30px;
-        }
-
-        .photo {
-            margin: 10px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s;
+        /* Wrench Button Styles */
+        #wrench-container {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            background-color: #008000;
+            color: #fff;
+            padding: 10px 15px;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
             cursor: pointer;
+            transition: left 0.3s;
+            z-index: 1000;
         }
 
-        .photo:hover {
-            transform: scale(1.1);
+        #wrench-container.expanded {
+            left: -150px;
         }
 
-        .photo img {
-            max-width: 100%;
-            height: auto;
+        /* Wrench Icon Styles */
+        #wrench-icon {
+            display: block;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        /* Wrench Menu Styles */
+        #wrench-menu {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            background-color: #fff;
+            width: 150px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+        }
+
+        #wrench-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #wrench-menu li {
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #wrench-menu li:hover {
+            background-color: #f4f4f4;
         }
     </style>
 </head>
 <body>
-    <div class="sidebar" id="sidebar">
-        <div class="menu-content">
-            <div class="menu-item"><a href="#">Home</a></div>
-            <div class="menu-item"><a href="#">Portfolio</a></div>
-            <div class="menu-item"><a href="#">Services</a></div>
-            <div class="menu-item"><a href="#">About</a></div>
-            <div class="menu-item"><a href="#">Contact</a></div>
-        </div>
+    <div id="progress-container">
+        <div id="progress-bar"></div>
     </div>
-
     <header>
-        <div class="menu-btn" id="menuBtn">
-            <div class="btn-lines"></div>
-            <div class="btn-lines"></div>
-            <div class="btn-lines"></div>
-        </div>
         <h1>Sai Ganesh</h1>
         <h2>Passionate Photographer Capturing Life's Moments</h2>
     </header>
@@ -326,119 +292,83 @@
                 <p>What's your favorite photography style?</p>
                 <button onclick="nextQuestion('question2')">Next</button>
             </div>
-            <div class="question" id="question2">
+            <div class="question" id="question2" style="display: none;">
                 <h2>Question 2</h2>
-                <p>Which camera do you prefer for outdoor photography?</p>
+                <p>What camera equipment do you use?</p>
                 <button onclick="nextQuestion('question3')">Next</button>
             </div>
-            <div class="question" id="question3">
+            <div class="question" id="question3" style="display: none;">
                 <h2>Question 3</h2>
-                <p>What's your favorite time of day to capture photos?</p>
-                <button onclick="nextQuestion('question4')">Next</button>
-            </div>
-            <div class="question" id="question4">
-                <h2>Question 4</h2>
-                <p>Do you have any photography tips for beginners?</p>
-                <button onclick="restartQuestionFlow()">Restart</button>
+                <p>Where do you find your inspiration?</p>
+                <button onclick="resetQuestions()">Start Over</button>
             </div>
         </div>
 
-        <!-- Useful Links and Buttons -->
-        <div class="useful-links">
-            <h2>Useful Links</h2>
-            <a href="https://example.com" target="_blank" class="btn">Visit Example.com</a>
-            <button id="changeUrlBtn" class="btn">Change URL</button>
-            <button id="addHashBtn" class="btn">Add Hash</button>
-            <button id="changeUIBtn" class="btn">Change UI</button>
+        <!-- Wrench Button -->
+        <div id="wrench-container" onclick="toggleWrenchMenu()">
+            <span id="wrench-icon">🔧</span>
+            <span>Menu</span>
         </div>
 
-        <!-- Exciting Components -->
-        <div class="exciting-components">
-            <h2>Explore Exciting Moments</h2>
-            <button class="exciting-button">View Portfolio</button>
-            <img src="https://via.placeholder.com/400" alt="Exciting Image" class="exciting-image">
-        </div>
-
-        <!-- Photo Gallery -->
-        <div class="photo-gallery">
-            <h2>Photo Gallery</h2>
-            <div class="photo">
-                <img src="https://via.placeholder.com/300" alt="Photo 1">
-            </div>
-            <div class="photo">
-                <img src="https://via.placeholder.com/300" alt="Photo 2">
-            </div>
-            <div class="photo">
-                <img src="https://via.placeholder.com/300" alt="Photo 3">
-            </div>
+        <!-- Wrench Menu -->
+        <div id="wrench-menu">
+            <ul>
+                <li>Item 1</li>
+                <li>Item 2</li>
+                <li>Item 3</li>
+            </ul>
         </div>
     </main>
     <footer>
         &copy; 2023 Sai Ganesh - Photographer
     </footer>
 
-    <!-- JavaScript for Button Actions, Scroll Percentage Indicator, Sidebar Menu, and Question Flow -->
+    <!-- JavaScript for Scroll Progress Bar -->
     <script>
-        // Function to change the URL without reloading the website
-        function changeURL() {
-            window.history.pushState({}, '', '/new-url');
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
         }
+    </script>
 
-        // Function to add a hash to the current URL in the browser
-        function addHash() {
-            window.location.hash = 'newhash';
-        }
+    <!-- JavaScript for Question Flow -->
+    <script>
+        var currentQuestion = 1;
 
-        // Function to change the UI without reloading the page
-        function changeUI() {
-            // Example: Change background color on button click
-            document.body.style.backgroundColor = '#f4f4f4';
-        }
-
-        // Event listeners for button clicks
-        document.getElementById('changeUrlBtn').addEventListener('click', changeURL);
-        document.getElementById('addHashBtn').addEventListener('click', addHash);
-        document.getElementById('changeUIBtn').addEventListener('click', changeUI);
-
-        // Function to update the scroll percentage indicator
-        function updateScrollPercentage() {
-            const scrollTop = window.scrollY;
-            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollPercentage = (scrollTop / scrollHeight) * 100;
-            document.title = `Scroll: ${scrollPercentage.toFixed(2)}%`;
-
-            // Update the widget
-            document.getElementById('scrollPercentageWidget').innerText = `Scroll: ${scrollPercentage.toFixed(2)}%`;
-        }
-
-        // Event listener for scroll
-        window.addEventListener('scroll', updateScrollPercentage);
-
-        // Initialize the scroll percentage on page load
-        window.addEventListener('load', updateScrollPercentage);
-
-        // Sidebar Menu Functionality
-        const menuBtn = document.getElementById('menuBtn');
-        const sidebar = document.getElementById('sidebar');
-
-        menuBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-            menuBtn.classList.toggle('active');
-        });
-
-        // Question Flow Functionality
-        let currentQuestion = 1;
-
-        function nextQuestion(questionId) {
+        function nextQuestion(nextId) {
             document.getElementById(`question${currentQuestion}`).style.display = 'none';
-            currentQuestion = parseInt(questionId.substring(8));
-            document.getElementById(questionId).style.display = 'block';
+            currentQuestion++;
+            document.getElementById(nextId).style.display = 'block';
         }
 
-        function restartQuestionFlow() {
+        function resetQuestions() {
             document.getElementById(`question${currentQuestion}`).style.display = 'none';
             currentQuestion = 1;
             document.getElementById('question1').style.display = 'block';
+        }
+    </script>
+
+    <!-- JavaScript for Wrench Menu -->
+    <script>
+        var wrenchMenuExpanded = false;
+
+        function toggleWrenchMenu() {
+            const wrenchMenu = document.getElementById('wrench-menu');
+            const wrenchContainer = document.getElementById('wrench-container');
+
+            if (wrenchMenuExpanded) {
+                wrenchMenu.style.display = 'none';
+                wrenchContainer.classList.remove('expanded');
+            } else {
+                wrenchMenu.style.display = 'block';
+                wrenchContainer.classList.add('expanded');
+            }
+
+            wrenchMenuExpanded = !wrenchMenuExpanded;
         }
     </script>
 </body>
