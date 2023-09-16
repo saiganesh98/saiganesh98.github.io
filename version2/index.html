@@ -18,7 +18,7 @@
         header {
             background-color: #008000;
             color: #fff;
-            padding: 40px 0;
+            padding: 20px 0;
             text-align: center;
         }
 
@@ -43,6 +43,7 @@
             background-color: #fff;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
+            position: relative;
         }
 
         /* Contact Form Styles */
@@ -128,10 +129,84 @@
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
         }
+
+        /* Sidebar Menu Styles */
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background-color: #333;
+            overflow-y: auto;
+            transition: left 0.3s;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .menu-btn {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .menu-btn .btn-lines {
+            background-color: #fff;
+            width: 25px;
+            height: 3px;
+            margin: 4px 0;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .menu-btn.active .btn-lines {
+            transform: rotate(45deg);
+            background-color: #008000;
+        }
+
+        .menu-btn.active .btn-lines:nth-child(2) {
+            transform: rotate(-45deg);
+        }
+
+        .menu-content {
+            padding: 20px;
+        }
+
+        .menu-item {
+            margin-bottom: 20px;
+        }
+
+        .menu-item a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .menu-item a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
+    <div class="sidebar" id="sidebar">
+        <div class="menu-content">
+            <div class="menu-item"><a href="#">Home</a></div>
+            <div class="menu-item"><a href="#">Portfolio</a></div>
+            <div class="menu-item"><a href="#">Services</a></div>
+            <div class="menu-item"><a href="#">About</a></div>
+            <div class="menu-item"><a href="#">Contact</a></div>
+        </div>
+    </div>
+
     <header>
+        <div class="menu-btn" id="menuBtn">
+            <div class="btn-lines"></div>
+            <div class="btn-lines"></div>
+            <div class="btn-lines"></div>
+        </div>
         <h1>Sai Ganesh</h1>
         <h2>Passionate Photographer Capturing Life's Moments</h2>
     </header>
@@ -177,7 +252,7 @@
         &copy; 2023 Sai Ganesh - Photographer
     </footer>
 
-    <!-- JavaScript for Button Actions and Scroll Percentage Indicator -->
+    <!-- JavaScript for Button Actions, Scroll Percentage Indicator, and Sidebar Menu -->
     <script>
         // Function to change the URL without reloading the website
         function changeURL() {
@@ -216,6 +291,15 @@
 
         // Initialize the scroll percentage on page load
         window.addEventListener('load', updateScrollPercentage);
+
+        // Sidebar Menu Functionality
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            menuBtn.classList.toggle('active');
+        });
     </script>
 </body>
 </html>
