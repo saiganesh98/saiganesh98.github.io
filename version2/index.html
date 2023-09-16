@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sai Ganesh - Photographer</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
     <style>
         /* Global Styles */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f0f0f0;
@@ -211,12 +212,32 @@
         <h2>Passionate Photographer Capturing Life's Moments</h2>
     </header>
     <main>
-        <!-- About Me -->
-        <h2>About Me</h2>
-        <p>Welcome to my world of photography! I'm Sai Ganesh, a dedicated photographer on a mission to capture life's most beautiful moments through my lens. I believe that every image tells a unique story, and I'm here to share those stories with you.</p>
+        <!-- Question Flow -->
+        <div class="question-flow">
+            <div class="question" id="question1">
+                <h2>Question 1</h2>
+                <p>What's your favorite photography style?</p>
+                <button onclick="nextQuestion('question2')">Next</button>
+            </div>
+            <div class="question" id="question2" style="display: none;">
+                <h2>Question 2</h2>
+                <p>Which camera do you prefer for outdoor photography?</p>
+                <button onclick="nextQuestion('question3')">Next</button>
+            </div>
+            <div class="question" id="question3" style="display: none;">
+                <h2>Question 3</h2>
+                <p>What's your favorite time of day to capture photos?</p>
+                <button onclick="nextQuestion('question4')">Next</button>
+            </div>
+            <div class="question" id="question4" style="display: none;">
+                <h2>Question 4</h2>
+                <p>Do you have any photography tips for beginners?</p>
+                <button onclick="nextQuestion('question1')">Restart</button>
+            </div>
+        </div>
 
         <!-- Contact Form -->
-        <div class="contact-form">
+        <div class="contact-form" id="contactForm" style="display: none;">
             <h2>Contact Me</h2>
             <form>
                 <label for="name">Name:</label>
@@ -252,7 +273,7 @@
         &copy; 2023 Sai Ganesh - Photographer
     </footer>
 
-    <!-- JavaScript for Button Actions, Scroll Percentage Indicator, and Sidebar Menu -->
+    <!-- JavaScript for Button Actions, Scroll Percentage Indicator, Sidebar Menu, and Question Flow -->
     <script>
         // Function to change the URL without reloading the website
         function changeURL() {
@@ -300,6 +321,14 @@
             sidebar.classList.toggle('active');
             menuBtn.classList.toggle('active');
         });
+
+        // Question Flow Functionality
+        let currentQuestion = 1;
+        function nextQuestion(questionId) {
+            document.getElementById(`question${currentQuestion}`).style.display = 'none';
+            currentQuestion = questionId.substring(8);
+            document.getElementById(questionId).style.display = 'block';
+        }
     </script>
 </body>
 </html>
