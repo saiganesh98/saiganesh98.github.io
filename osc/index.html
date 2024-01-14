@@ -96,10 +96,37 @@
   <title>My Website</title>
   <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
 
-<!-- Start VWO SmartCode --> 
+<!-- Start VWO SmartCode 
 <script referrerPolicy="no-referrer-when-downgrade" src="https://dev.visualwebsiteoptimizer.com/lib/819011.js" id="vwoCode"></script> 
-<!-- End VWO SmartCode -->	
+ End VWO SmartCode -->	
 
+
+<!-- Start VWO SmartCode -->
+<script referrerPolicy="no-referrer-when-downgrade" id="vwoCode"></script>
+<!-- End VWO SmartCode -->
+
+<script>
+  // Function to get the value of the 'id' parameter from the URL
+  function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+  }
+
+  // Get the 'id' parameter from the URL
+  var idParameter = getParameterByName('id');
+
+  // Check if 'id' parameter is present and not empty
+  if (idParameter) {
+    // Update the src attribute of the VWO SmartCode script tag
+    document.getElementById('vwoCode').src = 'https://dev.visualwebsiteoptimizer.com/lib/' + idParameter + '.js';
+  }
+</script>
+	
 	
   <script type="text/javascript">(function(){window._vwo_evq=window._vwo_evq||[];var _vwoOldPush=window._vwo_evq.push;var processEvent=function(){var eventData=arguments[0];if((eventData[0]==='rH')||(eventData[0]==='vS')){console.log(eventData[0]+' : '+eventData[1]+' ('+_vwo_exp[eventData[1]].type+') '+':'+eventData[1]+'-'+eventData[2]);}else if(eventData[0]==='uC'){console.log('url changed');}else if(eventData[0]==='submit'){console.log(eventData[0]);}};for(var i=0;i<window._vwo_evq.length;i++){processEvent(window._vwo_evq[i]);}window._vwo_evq.push=function(){processEvent.apply(this,[].slice.call(arguments));_vwoOldPush.apply(window._vwo_evq,[].slice.call(arguments));};})();</script>
   <script type="text/javascript">
