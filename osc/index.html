@@ -96,7 +96,9 @@
   <title>My Website</title>
   <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
 
-	<script>
+<!-- Add this script after the previous code -->
+
+<script>
   function logNetworkCalls() {
     // Intercept XMLHttpRequest
     var open = XMLHttpRequest.prototype.open;
@@ -109,11 +111,25 @@
       });
       open.apply(this, arguments);
     };
+
+    // Intercept fetch API
+    var originalFetch = window.fetch;
+    window.fetch = function() {
+      return originalFetch.apply(this, arguments)
+        .then(function(response) {
+          // Check if the network call URL contains 'https://dev.visualwebsiteoptimizer.com'
+          if (response.url.includes('https://dev.visualwebsiteoptimizer.com')) {
+            console.log('Network call:', response.url);
+          }
+          return response;
+        });
+    };
   }
 
   // Execute logNetworkCalls when the page is loaded
   logNetworkCalls();
 </script>
+
 <!-- Start VWO SmartCode 
 <script referrerPolicy="no-referrer-when-downgrade" src="https://dev.visualwebsiteoptimizer.com/lib/819011.js" id="vwoCode"></script> 
  End VWO SmartCode -->	
