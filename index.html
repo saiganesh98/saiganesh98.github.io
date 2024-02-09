@@ -134,7 +134,7 @@
         console.log("Account-Id ->", accountId);
         var account_id = accountId,
           version = 1.5,
-          settings_tolerance = 5000,
+          settings_tolerance = window.location.href.includes('splitVariation') ? 100 : 5000,
           library_tolerance = 5000,
           use_existing_jquery = false,
           is_spa = 1,
