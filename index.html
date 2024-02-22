@@ -3,6 +3,18 @@
   <head>
     <meta charset="utf-8">
     <style type="text/css">
+
+       .parent {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 20px; /* Increased margin for space */
+  }
+  .child {
+    border: 1px solid red;
+    padding: 5px;
+    margin: 20px; /* Increased margin for space */
+  }
+      
       .feedBackForm::placeholder {
         font-family: 'Apple Chancery';
       }
@@ -294,6 +306,13 @@
     </p>
     <div>
 
+<div class="parent" id="parent">
+  <div class="child" id="child">
+    Child Inner Text
+  </div>
+</div>
+
+      
       <form id="contactUsForm56">
         <label for="fname">First name:</label>
         <br />
