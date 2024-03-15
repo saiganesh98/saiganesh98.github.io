@@ -4,16 +4,17 @@
     <meta charset="utf-8">
     <style type="text/css">
 
-.horizontal-scroll-container {
-    overflow-x: auto;
-    white-space: nowrap;
-    padding: 20px;
-}
-
-.content {
-    display: inline-block;
-    white-space: nowrap;
-}
+  .horizontal-scroll {
+    overflow-x: scroll; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent wrapping */
+    width: 100%; /* Set the width of the container */
+    border: 1px solid black; /* Optional: Add a border for visibility */
+  }
+  .horizontal-scroll-content {
+    display: inline-block; /* Ensure content remains in a single line */
+    white-space: nowrap; /* Prevent wrapping */
+    padding: 10px; /* Optional: Add padding for content */
+  }
       
        .parent {
     border: 1px solid black;
@@ -588,8 +589,8 @@
       </div>
       <span class="css-1eh9cgh">Shop Now</span>
     </button>
-    <div class="horizontal-scroll-container">
-   <div class="content">
+    <div class="horizontal-scroll">
+   <div class="horizontal-scroll-content">
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non maximus erat, et bibendum leo. Pellentesque faucibus justo ac augue hendrerit, at ultricies nulla vestibulum. Fusce suscipit sapien ligula, vel sagittis metus porttitor id. Donec rhoncus, lorem ut tincidunt condimentum, enim odio dapibus ligula, vel cursus risus leo id purus. Donec laoreet arcu vitae erat hendrerit, vitae luctus orci posuere. Nunc ultricies mattis libero, id vestibulum libero accumsan vel. Mauris sed libero non orci interdum ullamcorper. Nulla facilisi. Nulla ac volutpat sem.</p>
    </div>
 </div>
