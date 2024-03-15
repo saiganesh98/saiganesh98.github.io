@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Horizontal Scroll Test</title>
+<style>
+  .horizontal-scroll {
+    overflow-x: scroll; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent wrapping */
+    width: 100%; /* Set the width of the container */
+    border: 1px solid black; /* Optional: Add a border for visibility */
+  }
+  .horizontal-scroll-content {
+    display: inline-block; /* Ensure content remains in a single line */
+    white-space: nowrap; /* Prevent wrapping */
+    padding: 10px; /* Optional: Add padding for content */
+  }
+</style>
+   <!-- Start VWO Async SmartCode -->
+    <script type='text/javascript'>
+      window.VWO = window.VWO || [];
+      VWO.push(['config', {
+        storage: {
+          // enter the full url of the sync script
+          syncUrl: 'https://saiganesh98.github.io/sync.php'
+        }
+      }]);
+      window._vwo_code = window._vwo_code || (function() {
+        const params = new URLSearchParams(window.location.search);
+        const accId = parseInt(params.get("id"));
+        const accountId = accId || 623598;
+        console.log("Account-Id ->", accountId);
+        var account_id = accountId,
+          version = 1.5,
+          settings_tolerance = window.location.href.includes('timeoutVerification') ? 0 : 5000,
+          library_tolerance = 5000,
+          use_existing_jquery = false,
+          is_spa = 1,
+          hide_element = 'body',
+          hide_element_style = 'opacity:0 !important;filter:alpha(opacity=0) !important;background:none !important',
+          /* DO NOT EDIT BELOW THIS LINE */
+          f = false,
+          d = document,
+          vwoCodeEl = d.querySelector('#vwoCode'),
+          code = {
+            use_existing_jquery: function() {
+              return use_existing_jquery
+            },
+            library_tolerance: function() {
+              return library_tolerance
+            },
+            hide_element_style: function() {
+              return '{' + hide_element_style + '}'
+            },
+            finish: function() {
+              if (!f) {
+                f = true;
+                var e = d.getElementById('_vis_opt_path_hides');
+                if (e) e.parentNode.removeChild(e)
+              }
+            },
+            finished: function() {
+              return f
+            },
+            load: function(e) {
+              var t = d.createElement('script');
+              t.fetchPriority = 'high';
+              t.src = e;
+              t.type = 'text/javascript';
+              t.onerror = function() {
+                _vwo_code.finish()
+              };
+              d.getElementsByTagName('head')[0].appendChild(t)
+            },
+            getVersion: function() {
+              return version
+            },
+            getMatchedCookies: function(e) {
+              var t = [];
+              if (document.cookie) {
+                t = document.cookie.match(e) || []
+              }
+              return t
+            },
+            getCombinationCookie: function() {
+              var e = code.getMatchedCookies(/(?:^|;)\s?(_vis_opt_exp_\d+_combi=[^;$]*)/gi);
+              e = e.map(function(e) {
+                try {
+                  var t = decodeURIComponent(e);
+                  if (!/_vis_opt_exp_\d+_combi=(?:\d+,?)+\s*$/.test(t)) {
+                    return ''
+                  }
+                  return t
+                } catch (e) {
+                  return ''
+                }
+              });
+              var i = [];
+              e.forEach(function(e) {
+                var t = e.match(/([\d,]+)/g);
+                t && i.push(t.join('-'))
+              });
+              return i.join('|')
+            },
+            init: function() {
+              if (d.URL.indexOf('__vwo_disable__') > -1) return;
+              window.settings_timer = setTimeout(function() {
+                _vwo_code.finish()
+              }, settings_tolerance);
+              var e = d.createElement('style'),
+                t = hide_element ? hide_element + '{' + hide_element_style + '}' : '',
+                i = d.getElementsByTagName('head')[0];
+              e.setAttribute('id', '_vis_opt_path_hides');
+              vwoCodeEl && e.setAttribute('nonce', vwoCodeEl.nonce);
+              e.setAttribute('type', 'text/css');
+              if (e.styleSheet) e.styleSheet.cssText = t;
+              else e.appendChild(d.createTextNode(t));
+              i.appendChild(e);
+              var n = this.getCombinationCookie();
+              this.load('https://dev.visualwebsiteoptimizer.com/j.php?a=' + account_id + '&u=' + encodeURIComponent(d.URL) + '&f=' + +is_spa + '&vn=' + version + (n ? '&c=' + n : ''));
+              return settings_timer
+            }
+          };
+        window._vwo_settings_timer = code.init();
+        return code;
+      }());
+      _vwo_pc_custom = {
+        a: 100,
+        t: 100
+      };
+    </script>
+
+  
+</head>
+<body>
+<div class="horizontal-scroll">
+  <div class="horizontal-scroll-content">
+    <p>This is some dummy content that will scroll horizontally. </p>
+    <p>This is some dummy content that will scroll horizontally. </p>
+    <p>This is some dummy content that will scroll horizontally. </p>
+    <p>This is some dummy content that will scroll horizontally. </p>
+    <p>This is some dummy content that will scroll horizontally. </p>
+    <p>This is some dummy content that will scroll horizontally. </p>
+    <p>This is some dummy content that will scroll horizontally. </p>
+    <p>This is some dummy content that will scroll horizontally. </p>
+    <p>This is some dummy content that will scroll horizontally. </p>
+  </div>
+</div>
+</body>
+</html>
