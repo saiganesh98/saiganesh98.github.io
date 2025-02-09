@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impression Tracker</title>
+    <style>
+        .post {
+            width: 200px; /* Set a fixed width for posts */
+            margin: 10px; /* Adjust margins to control spacing */
+            padding: 20px;
+            background-color: #20b2aa;
+            border: 2px solid #ccff00;
+            color: black;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+      
+        body {
+            background-color: #FF5733; /* Bright Orange-Red */
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .container {
+            display: flex; /* Enables flexbox */
+            justify-content: space-around; /* Distributes equal space between posts */
+            align-items: center; /* Aligns posts vertically */
+        }
+        
+        #test1, #test2 {
+            display: flex;
+            flex-direction: column; /* Ensures the posts stack vertically */
+            justify-content: space-around; /* Equal vertical spacing */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="test1">
+            <div class="post" data-post-id="1">Post #1</div>
+            <div class="post" data-post-id="2">Post #2</div>
+            <div class="post" data-post-id="3">Post #3</div>
+        </div>
+      
+        <div id="test2">
+            <div class="post" data-post-id="1">Post #1</div>
+            <div class="post" data-post-id="2">Post #2</div>
+            <div class="post" data-post-id="3">Post #3</div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impression Tracker</title>
+    <style>
+        .post {
+            width: 250%;
+            margin: 50px auto;
+          //	margin-right: px;
+            padding: 20px;
+            background-color: #20b2aa;
+            border: 2px solid #ccff00;
+            color : black;
+            text-align : center;
+            font-family : Arial, sans-serif;
+        }
+      
+          body {
+            background-color: #FF5733; /* Bright Orange-Red */
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+         .container {
+            display: flex; /* Enables flexbox */
+            justify-content: space-between; /* Optional: Adds space between the divs */
+      		  
+      }
+    </style>
+</head>
+<body>
+  <div class="container">
+  <div id = "test1">
+    <div class="post" data-post-id="1">Post #1</div>
+    <div class="post" data-post-id="2">Post #2</div>
+    <div class="post" data-post-id="3">Post #3</div>
+  </div>
+  
+  <div id = "test2">
+    <div class="post" data-post-id="1">Post #1</div>
+    <div class="post" data-post-id="2">Post #2</div>
+    <div class="post" data-post-id="3">Post #3</div>
+  </div>
+  </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
