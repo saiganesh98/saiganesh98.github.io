@@ -95,20 +95,20 @@
       background-color: #0056b3;
       transform: scale(1.05);
     }
-
+ 
     .theme-toggle {
     position: fixed;
     top: 1rem;
     right: 1rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem;
     background-color: var(--button-bg);
     color: var(--button-text);
     border: none;
-    border-radius: 4px;
+    border-radius: 50%; /* Make it circular */
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    justify-content: center; /* Center the icon */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s, transform 0.2s;
     z-index: 1000; /* Ensure it stays above other elements */
@@ -117,6 +117,23 @@
   .theme-toggle:hover {
     background-color: #0056b3;
     transform: scale(1.05);
+  }
+
+  /* Responsive styling for smaller screens */
+  @media (max-width: 600px) {
+    .theme-toggle {
+      top: 0.5rem;
+      right: 0.5rem;
+      padding: 0.5rem;
+      font-size: 1rem;
+      width: 40px; /* Set a fixed width */
+      height: 40px; /* Set a fixed height */
+      border-radius: 50%; /* Ensure it stays circular */
+    }
+
+    .theme-toggle i {
+      font-size: 1.2rem; /* Adjust icon size */
+    }
   }
 
     .result {
