@@ -97,19 +97,27 @@
     }
 
     .theme-toggle {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      padding: 0.5rem 1rem;
-      background-color: var(--button-bg);
-      color: var(--button-text);
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.2s;
+    z-index: 1000; /* Ensure it stays above other elements */
+  }
+
+  .theme-toggle:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
 
     .result {
       margin-top: 2rem;
@@ -180,7 +188,7 @@
 <body>
 
   <button class="theme-toggle" onclick="toggleTheme()">
-    <i class="fas fa-adjust"></i> Toggle Dark Mode
+    <i class="fas fa-adjust"></i>
   </button>
 
   <div class="container">
