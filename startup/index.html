@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Farmer Payment Calculator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    :root {
+      --bg-color: #f4f4f9;
+      --text-color: #333;
+      --input-bg: #ffffff;
+      --button-bg: #007bff;
+      --button-text: #ffffff;
+      --card-bg: #ffffff;
+      --card-shadow: rgba(0, 0, 0, 0.1);
+      --primary-color: #007bff;
+      --secondary-color: #6c757d;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #121212;
+      --text-color: #ffffff;
+      --input-bg: #1e1e1e;
+      --button-bg: #1a73e8;
+      --button-text: #ffffff;
+      --card-bg: #1e1e1e;
+      --card-shadow: rgba(255, 255, 255, 0.1);
+    }
+
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 600px;
+      background-color: var(--card-bg);
+      box-shadow: 0 4px 8px var(--card-shadow);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 1rem;
+      transition: box-shadow 0.3s;
+    }
+
+    .container:hover {
+      box-shadow: 0 8px 16px var(--card-shadow);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      background-color: var(--input-bg);
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      background-color: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .result {
+      margin-top: 2rem;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      font-size: 1.2rem;
+      background-color: var(--input-bg);
+      border-radius: 4px;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .checkbox-container input {
+      width: auto;
+      margin-right: 0.5rem;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .modal button {
+      margin-top: 1rem;
+      background-color: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 1rem;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="theme-toggle" onclick="toggleTheme()">
+    <i class="fas fa-adjust"></i> Toggle Dark Mode
+  </button>
+
+  <div class="container">
+    <h1>Farmer Payment Calculator</h1>
+
+    <label for="farmer">Farmer Name</label>
+    <input type="text" id="farmer" placeholder="Enter farmer name" oninput="this.setAttribute('value', this.value)" />
+    <label for="bags">Number of Bags</label>
+    <input type="number" id="bags" oninput="this.setAttribute('value', this.value)" />
+
+    <label for="muta">Muta (in kg, optional)</label>
+    <input type="number" id="muta" oninput="this.setAttribute('value', this.value)" />
+
+    <div class="checkbox-container">
+      <input type="checkbox" id="includeMuta" onchange="this.setAttribute('checked', this.checked)" />
+      <label for="includeMuta">Include Muta for Hamali even if less than 30kg</label>
+    </div>
+
+    <label for="weight">Weight per Bag (kg)</label>
+    <input type="number" id="weight" value="65" oninput="this.setAttribute('value', this.value)" />
+
+    <label for="rate">Rate per Quintal</label>
+    <input type="number" id="rate" value="2400" oninput="this.setAttribute('value', this.value)" />
+
+    <label for="hamaliRate">Hamali per Bag (Rs.)</label>
+    <input type="number" id="hamaliRate" value="24" oninput="this.setAttribute('value', this.value)" />
+
+    <label for="commission">Commission Percentage (%)</label>
+    <input type="number" id="commission" value="1" oninput="this.setAttribute('value', this.value)" />
+
+    <label for="advance">Advance Paid (Rs.)</label>
+    <input type="number" id="advance" value="0" oninput="this.setAttribute('value', this.value)" />
+
+    <label for="date">Date</label>
+    <input type="date" id="date" oninput="this.setAttribute('value', this.value)" />
+
+    <button onclick="calculate()">Calculate</button>
+    <button onclick="downloadPDF()">Download PDF</button>
+
+    <div id="result" class="result" style="display: none;"></div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="modal" id="modal">
+    <p id="modalContent"></p>
+    <button onclick="closeModal()">Close</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById("date").value = today;
+    });
+
+    // function toggleTheme() {
+    //   const currentTheme = document.body.getAttribute("data-theme");
+    //   const newTheme = currentTheme === "dark" ? "light" : "dark";
+    //   document.body.setAttribute("data-theme", newTheme);
+
+    //   const inputs = document.querySelectorAll("input, select");
+    //   const textColor = newTheme === "dark" ? "rgb(255, 255, 255)" : "rgb(0, 0, 0)";
+    //   inputs.forEach(input => {
+    //     input.style.color = textColor;
+    //   });
+    // }
+
+    function toggleTheme() {
+    const currentTheme = document.body.getAttribute("data-theme");
+    const newTheme = currentTheme === "dark" ? "light" : "dark";
+    document.body.setAttribute("data-theme", newTheme);
+
+    // Update input fields' styles dynamically
+    const inputs = document.querySelectorAll("input, select");
+    inputs.forEach(input => {
+      input.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue("--input-bg");
+      input.style.color = getComputedStyle(document.documentElement).getPropertyValue("--text-color");
+    });
+  }
+
+
+  </script>
+  </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById("date").value = today;
+    });
+
+    let resultData = {};
+
+    function calculate() {
+    // Validate required fields
+    const farmer = document.getElementById('farmer').value.trim();
+    const bags = document.getElementById('bags').value.trim();
+    const weight = document.getElementById('weight').value.trim();
+    const rate = document.getElementById('rate').value.trim();
+    const hamaliRate = document.getElementById('hamaliRate').value.trim();
+    const commission = document.getElementById('commission').value.trim();
+    const advance = document.getElementById('advance').value.trim();
+
+    const requiredFields = [
+      { id: 'farmer', name: 'Farmer Name' },
+      { id: 'bags', name: 'Number of Bags' },
+      { id: 'weight', name: 'Weight per Bag' },
+      { id: 'rate', name: 'Rate per Quintal' },
+      { id: 'hamaliRate', name: 'Hamali per Bag' },
+      { id: 'commission', name: 'Commission Percentage' },
+      { id: 'advance', name: 'Advance Paid' }
+    ];
+
+    for (const field of requiredFields) {
+      const value = document.getElementById(field.id).value.trim();
+      if (!value) {
+        alert(`Please fill in the ${field.name} field.`);
+        document.getElementById(field.id).focus();
+        return;
+      }
+    }
+
+    // Existing calculation logic
+    const muta = parseFloat(document.getElementById('muta').value) || 0;
+    const includeMuta = document.getElementById('includeMuta').checked;
+    const date = document.getElementById('date').value;
+
+    const totalWeight = (parseFloat(bags) * parseFloat(weight) + muta) / 100; // in quintals
+    const gross = totalWeight * parseFloat(rate);
+
+    let hamaliBags = parseFloat(bags);
+    if (muta >= 30) {
+      hamaliBags += 1;
+    } else if (includeMuta && muta > 0) {
+      hamaliBags += 1;
+    }
+
+    const hamali = hamaliBags * parseFloat(hamaliRate);
+    const net = gross - hamali;
+    const commissionAmount = (net * parseFloat(commission)) / 100;
+    const final = net - commissionAmount - parseFloat(advance);
+
+    resultData = {
+      farmer,
+      bags: parseFloat(bags),
+      muta,
+      hamaliBags,
+      weight: parseFloat(weight),
+      rate: parseFloat(rate),
+      totalWeight,
+      gross,
+      hamali,
+      net,
+      commission: parseFloat(commission),
+      commissionAmount,
+      advance: parseFloat(advance),
+      final,
+      date
+    };
+
+    document.getElementById('result').innerHTML = `
+      Farmer Name: ${farmer}<br>
+      Hamali Bags (based on Muta): ${hamaliBags}<br>
+      Total Weight (Quintals): ${totalWeight.toFixed(2)}<br>
+      Gross Amount: Rs. ${gross.toFixed(2)}<br>
+      Hamali: Rs. ${hamali.toFixed(2)}<br>
+      Net Amount: Rs. ${net.toFixed(2)}<br>
+      Commission (${commission}%): Rs. ${commissionAmount.toFixed(2)}<br>
+      Advance Paid: Rs. ${advance}<br>
+      <strong>Final Payable Amount: Rs. ${final.toFixed(2)}</strong>
+    `;
+    document.getElementById('result').style.display = 'block';
+
+    // Scroll to result
+    document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+
+    // Show modal
+    document.getElementById('modalContent').innerText = `Final Payable Amount: Rs. ${final.toFixed(2)}`;
+    document.getElementById('modalOverlay').style.display = 'block';
+    document.getElementById('modal').style.display = 'block';
+  }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').style.display = 'none';
+      document.getElementById('modal').style.display = 'none';
+    }
+
+
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const farmer = resultData.farmer || "Farmer";
+      const date = resultData.date || new Date().toISOString().split('T')[0];
+
+      const lines = [
+        ["Date", date],
+        ["Farmer Name", farmer],
+        ["Bags", resultData.bags],
+        ["Muta (kg)", resultData.muta],
+        ["Hamali Bags", resultData.hamaliBags],
+        ["Weight per Bag", resultData.weight + "kg"],
+        ["Rate per Quintal", `Rs. ${resultData.rate}`],
+        ["Total Weight (Quintals)", resultData.totalWeight.toFixed(2)],
+        ["Gross Amount", `Rs. ${resultData.gross.toFixed(2)}`],
+        ["Hamali", `Rs. ${resultData.hamali.toFixed(2)}`],
+        ["Net Amount", `Rs. ${resultData.net.toFixed(2)}`],
+        [`Commission (${resultData.commission}%)`, `Rs. ${resultData.commissionAmount.toFixed(2)}`],
+        ["Advance Paid", `Rs. ${resultData.advance.toFixed(2)}`],
+        ["Final Payable Amount", `Rs. ${resultData.final.toFixed(2)}`]
+      ];
+
+      const maxLabelWidth = Math.max(...lines.map(([label]) => label.length));
+      const formattedLines = lines.map(([label, value]) => {
+        const paddedLabel = label.padEnd(maxLabelWidth, ' ');
+        return `${paddedLabel}: ${value}`;
+      });
+
+      let y = 20;
+      doc.setFont("courier", "normal");
+      formattedLines.forEach(line => {
+        doc.text(line, 20, y);
+        y += 10;
+      });
+
+      const fileName = `${farmer.replace(/\s+/g, '_').toLowerCase()}_paddy_${date}.pdf`;
+      doc.save(fileName);
+    }
+
+  </script>
+
+
+</body>
+</html>
