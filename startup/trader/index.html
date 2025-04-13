@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trader Payment Calculator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --bg-color: #f5f7fa;
+      --text-color: #2c3e50;
+      --input-bg: #ffffff;
+      --button-bg: #3498db;
+      --button-text: #ffffff;
+      --card-bg: #ffffff;
+      --card-shadow: rgba(0, 0, 0, 0.08);
+      --primary-color: #3498db;
+      --secondary-color: #2ecc71;
+      --accent-color: #e74c3c;
+      --border-radius: 12px;
+      --input-border: #e0e6ed;
+      --input-focus: #3498db;
+      --label-color: #7f8c8d;
+      --success-color: #2ecc71;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #1a1a2e;
+      --text-color: #e0e0e0;
+      --input-bg: #222246;
+      --button-bg: #4361ee;
+      --button-text: #ffffff;
+      --card-bg: #16213e;
+      --card-shadow: rgba(0, 0, 0, 0.3);
+      --primary-color: #4361ee;
+      --secondary-color: #48bfe3;
+      --accent-color: #ef476f;
+      --input-border: #2c3e50;
+      --input-focus: #4361ee;
+      --label-color: #a0aec0;
+      --success-color: #06d6a0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      transition: all 0.3s ease;
+      position: relative;
+      background-image: linear-gradient(135deg, rgba(52, 152, 219, 0.05) 0%, rgba(46, 204, 113, 0.05) 100%);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      background-color: var(--card-bg);
+      box-shadow: 0 10px 30px var(--card-shadow);
+      border-radius: var(--border-radius);
+      padding: 2.5rem;
+      margin: 2rem 1rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px var(--card-shadow);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 2rem;
+      font-weight: 700;
+      font-size: 2.2rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+
+    h1::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      border-radius: 3px;
+    }
+
+    /* Two-column layout */
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -15px;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-col {
+      flex: 1;
+      padding: 0 15px;
+      min-width: 120px;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--label-color);
+      font-size: 0.9rem;
+      transition: color 0.3s ease;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      margin-top: 0.25rem;
+      background-color: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      color: var(--text-color);
+      font-family: 'Poppins', sans-serif;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+    }
+
+    input:hover, select:hover {
+      border-color: var(--primary-color);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 2rem;
+    }
+
+    button {
+      flex: 1;
+      padding: 0.85rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      background-color: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    button::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+      z-index: -1;
+    }
+
+    button:hover::before {
+      left: 100%;
+    }
+
+    button:hover {
+      background-color: var(--primary-color);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+    }
+
+    button:active {
+      transform: translateY(-1px);
+    }
+ 
+    .theme-toggle {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 50px;
+      height: 50px;
+      padding: 0;
+      background-color: var(--card-bg);
+      color: var(--primary-color);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px var(--card-shadow);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .theme-toggle i {
+      font-size: 1.3rem;
+      transition: transform 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px var(--card-shadow);
+    }
+
+    .theme-toggle:hover i {
+      transform: rotate(30deg);
+    }
+
+    @media (max-width: 600px) {
+      .theme-toggle {
+        top: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+      }
+
+      .theme-toggle i {
+        font-size: 1.1rem;
+      }
+    }
+
+    .result {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      border: 1px solid var(--input-border);
+      font-size: 1rem;
+      background-color: var(--input-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 5px 15px var(--card-shadow);
+      transition: all 0.3s ease;
+      line-height: 1.6;
+    }
+
+    .result strong {
+      color: var(--success-color);
+      font-size: 1.1rem;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-top: 1rem;
+    }
+
+    .checkbox-container input {
+      width: auto;
+      margin-right: 0.5rem;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      padding: 2.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      min-width: 300px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(3px);
+      z-index: 999;
+      transition: all 0.3s ease;
+    }
+
+    .modal button {
+      margin-top: 1.5rem;
+      background-color: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* Loading spinner */
+    .loader {
+      border: 3px solid rgba(52, 152, 219, 0.1);
+      border-top: 3px solid var(--primary-color);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 2s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Custom styled input fields */
+    input[type="date"] {
+      cursor: pointer;
+    }
+
+    input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background-color: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+      display: inline-block;
+      position: relative;
+      cursor: pointer;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    input[type="checkbox"]:checked {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    input[type="checkbox"]:checked::after {
+      content: "\f00c";
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      color: white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 12px;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      color: var(--primary-color);
+      font-weight: 600;
+      margin: 1.5rem 0 1rem 0;
+      border-bottom: 1px solid var(--input-border);
+      padding-bottom: 0.5rem;
+    }
+
+    /* Badge for result amount */
+    .amount-badge {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      display: inline-block;
+      margin-top: 0.5rem;
+    }
+
+    #modalContent {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--label-color);
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 1.5rem;
+      }
+
+      .form-col {
+        flex: 100%;
+      }
+      
+      button {
+        width: 100%;
+      }
+      
+      .button-group {
+        flex-direction: column;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+    
+   ::selection {
+    background: brown; /* teal */
+    color: white;
+  }
+  </style>
+</head>
+<body>
+
+  <button class="theme-toggle" onclick="toggleTheme()">
+    <i class="fas fa-adjust"></i>
+  </button>
+
+  <div class="container">
+    <h1>Trader Payment Calculator</h1>
+
+    <div class="section-title">Trader Information</div>
+    <div class="form-row">
+      <div class="form-col">
+        <label for="trader">Trader Name</label>
+        <input type="text" id="trader" placeholder="Enter trader name" oninput="this.setAttribute('value', this.value)" />
+      </div>
+    </div>
+
+    <div class="section-title">Weight and Pricing</div>
+    <div class="form-row">
+      <div class="form-col">
+        <label for="weighBridge">Weigh Bridge (kg)</label>
+        <input type="number" id="weighBridge" placeholder="Enter weigh bridge weight in kg" oninput="this.setAttribute('value', this.value)" />
+      </div>
+      <div class="form-col">
+        <label for="price">Price per Quintal (Rs.)</label>
+        <input type="number" id="price" placeholder="Enter price per quintal" oninput="this.setAttribute('value', this.value)" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-col">
+        <label for="shoot">Shoot per Ton (kg)</label>
+        <input type="number" id="shoot" value="5" placeholder="Enter shoot per ton" oninput="this.setAttribute('value', this.value)" />
+      </div>
+    </div>
+
+    <div class="section-title">Commission and Deductions</div>
+    <div class="form-row">
+      <div class="form-col">
+        <label for="cc">CC (%)</label>
+        <input type="number" id="cc" value="1" placeholder="Enter CC percentage" oninput="this.setAttribute('value', this.value)" />
+      </div>
+      <div class="form-col">
+        <label for="commission">Commission per Quintal (Rs.)</label>
+        <input type="number" id="commission" value="0" placeholder="Enter commission per quintal" oninput="this.setAttribute('value', this.value)" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-col">
+        <label for="advance">Advance Paid (Rs.)</label>
+        <input type="number" id="advance" placeholder="Enter advance amount" oninput="this.setAttribute('value', this.value)" />
+      </div>
+      <div class="form-col">
+        <label for="deduction">Deductions (Rs.)</label>
+        <input type="number" id="deduction" placeholder="Enter deductions" oninput="this.setAttribute('value', this.value)" />
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button onclick="calculateTrader()"><i class="fas fa-calculator"></i> Calculate</button>
+      <button onclick="downloadTraderPDF()"><i class="fas fa-file-pdf"></i> Download PDF</button>
+    </div>
+
+    <div id="result" class="result" style="display: none;"></div>
+
+    <div class="footer">
+      Trader Calculator • Designed for Trader Payment Management
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="modal" id="modal">
+    <div id="loadingSpinner" class="loader"></div>
+    <p id="modalContent" style="display: none;"></p>
+    <button id="closeModalBtn" style="display: none;" onclick="closeModal()">Close</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById("date").value = today;
+    });
+
+    function toggleTheme() {
+      const currentTheme = document.body.getAttribute("data-theme");
+      const newTheme = currentTheme === "dark" ? "light" : "dark";
+      document.body.setAttribute("data-theme", newTheme);
+
+      // Update input fields' styles dynamically
+      const inputs = document.querySelectorAll("input, select");
+      inputs.forEach(input => {
+        input.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue("--input-bg");
+        input.style.color = getComputedStyle(document.documentElement).getPropertyValue("--text-color");
+      });
+    }
+
+    let resultData = {};
+
+    function calculateTrader() {
+      // Validate required fields
+      const trader = document.getElementById('trader').value.trim();
+      const weighBridge = document.getElementById('weighBridge').value.trim();
+      const price = document.getElementById('price').value.trim();
+      const shoot = document.getElementById('shoot').value.trim();
+      const cc = document.getElementById('cc').value.trim() || 0;
+      const commission = document.getElementById('commission').value.trim() || 0;
+      const advance = document.getElementById('advance').value.trim() || 0;
+      const deduction = document.getElementById('deduction').value.trim() || 0;
+
+      const requiredFields = [
+        { id: 'trader', name: 'Trader Name' },
+        { id: 'weighBridge', name: 'Weigh Bridge' },
+        { id: 'price', name: 'Price per Quintal' },
+        { id: 'shoot', name: 'Shoot per Ton' }
+      ];
+
+      for (const field of requiredFields) {
+        const value = document.getElementById(field.id).value.trim();
+        if (!value) {
+          showModal(`Please fill in the ${field.name} field.`);
+          document.getElementById(field.id).focus();
+          return;
+        }
+      }
+
+      // Show loading modal
+      showModal("Calculating...");
+
+      // Calculations
+      const shootValue = Math.ceil((parseFloat(weighBridge) * parseFloat(shoot)) / 1000); // Round up shoot
+      const netWeightKg = parseFloat(weighBridge) - shootValue;
+      const netWeightQuintal = netWeightKg / 100;
+      const netTotal = netWeightQuintal * parseFloat(price);
+      const commissionValue = netWeightQuintal * parseFloat(commission);
+      const netTotalAfterCC = netTotal - (parseFloat(cc) / 100 * netTotal) - commissionValue;
+      const totalAmount = netTotalAfterCC - parseFloat(advance) - parseFloat(deduction);
+
+      resultData = {
+        trader,
+        weighBridge: parseFloat(weighBridge),
+        shootValue,
+        netWeightKg,
+        netWeightQuintal,
+        price: parseFloat(price),
+        netTotal,
+        ccValue: (parseFloat(cc) / 100 * netTotal),
+        commissionValue,
+        netTotalAfterCC,
+        advance: parseFloat(advance),
+        deduction: parseFloat(deduction),
+        totalAmount
+      };
+
+      // Display all details under the "Calculate" button
+      document.getElementById('result').innerHTML = `
+        <div class="section-title">Calculation Results</div>
+        <p><strong>Trader Name:</strong> ${trader}</p>
+        <p><strong>Weigh Bridge:</strong> ${weighBridge} kg</p>
+        <p><strong>Shoot (Rounded):</strong> ${shootValue} kg</p>
+        <p><strong>Net Weight:</strong> ${netWeightKg.toFixed(2)} kg (${netWeightQuintal.toFixed(2)} Quintals)</p>
+        <p><strong>Price per Quintal:</strong> Rs. ${price}</p>
+        <p><strong>Net Total:</strong> Rs. ${netTotal.toFixed(2)}</p>
+        <p><strong>CC Value:</strong> Rs. ${resultData.ccValue.toFixed(2)}</p>
+        <p><strong>Commission Value:</strong> Rs. ${commissionValue.toFixed(2)}</p>
+        <p><strong>Net Amount after CC and Commission:</strong> Rs. ${netTotalAfterCC.toFixed(2)}</p>
+        <p><strong>Advance Paid:</strong> Rs. ${advance}</p>
+        <p><strong>Deductions:</strong> Rs. ${deduction}</p>
+        <div class="amount-badge">Final Payable Amount: Rs. ${totalAmount.toFixed(2)}</div>
+      `;
+      document.getElementById('result').style.display = 'block';
+
+      // Show only the final value in the modal
+      setTimeout(() => {
+        showModal(`Final Payable Amount: Rs. ${totalAmount.toFixed(2)}`);
+      }, 500);
+    }
+
+    function showModal(content) {
+      document.getElementById('loadingSpinner').style.display = content === "Calculating..." ? 'block' : 'none';
+      document.getElementById('modalContent').style.display = content === "Calculating..." ? 'none' : 'block';
+      document.getElementById('closeModalBtn').style.display = content === "Calculating..." ? 'none' : 'block';
+      document.getElementById('modalOverlay').style.display = 'block';
+      document.getElementById('modal').style.display = 'block';
+      document.getElementById('modalContent').innerHTML = content;
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').style.display = 'none';
+      document.getElementById('modal').style.display = 'none';
+    }
+
+    function downloadTraderPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const trader = resultData.trader || "Trader";
+      const date = new Date().toISOString().split('T')[0];
+
+      const lines = [
+        ["Date", date],
+        ["Trader Name", trader],
+        ["Weigh Bridge (kg)", resultData.weighBridge],
+        ["Shoot (Rounded)", `${resultData.shootValue} kg`],
+        ["Net Weight (kg)", `${resultData.netWeightKg.toFixed(2)} kg`],
+        ["Net Weight (Quintals)", `${resultData.netWeightQuintal.toFixed(2)}`],
+        ["Price per Quintal", `Rs. ${resultData.price}`],
+        ["Net Total", `Rs. ${resultData.netTotal.toFixed(2)}`],
+        ["CC Value", `Rs. ${resultData.ccValue.toFixed(2)}`],
+        ["Commission Value", `Rs. ${resultData.commissionValue.toFixed(2)}`],
+        ["Net Amount after CC and Commission", `Rs. ${resultData.netTotalAfterCC.toFixed(2)}`],
+        ["Advance Paid", `Rs. ${resultData.advance}`],
+        ["Deductions", `Rs. ${resultData.deduction}`],
+        ["Final Payable Amount", `Rs. ${resultData.totalAmount.toFixed(2)}`]
+      ];
+
+      const labelX = 20; // X-coordinate for labels
+      const valueX = 90; // X-coordinate for values
+      let y = 25; // Initial Y-coordinate
+
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.text("Trader Payment Calculation", 105, 15, { align: "center" });
+
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      lines.forEach(([label, value]) => {
+        doc.text(label, labelX, y); // Print label at fixed X-coordinate
+        doc.text(`: ${value}`, valueX, y); // Print value at fixed X-coordinate
+        y += 10;
+      });
+
+      doc.setFontSize(8);
+      doc.setFont("helvetica", "italic");
+      doc.text("Generated by Trader Calculator", 105, 285, { align: "center" });
+
+      const fileName = `${trader.replace(/\s+/g, '_').toLowerCase()}_trader_${date}.pdf`;
+      doc.save(fileName);
+    }
+  </script>
+</body>
+</html>
