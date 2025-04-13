@@ -492,12 +492,44 @@
 
     <div class="form-row">
       <div class="form-col">
+        <label for="weighBridgeAmount">Weigh Bridge Amount (Rs.)</label>
+        <input type="number" id="weighBridgeAmount" value="0" placeholder="Enter weigh bridge amount" oninput="this.setAttribute('value', this.value)" />
+      </div>
+      <div class="form-col">
+        <label for="gmValue">GM Value (Rs.)</label>
+        <input type="number" id="gmValue" value="0" placeholder="Enter GM value" oninput="this.setAttribute('value', this.value)" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-col">
         <label for="advance">Advance Paid (Rs.)</label>
         <input type="number" id="advance" placeholder="Enter advance amount" oninput="this.setAttribute('value', this.value)" />
       </div>
       <div class="form-col">
         <label for="deduction">Deductions (Rs.)</label>
         <input type="number" id="deduction" placeholder="Enter deductions" oninput="this.setAttribute('value', this.value)" />
+      </div>
+    </div>
+
+    <div class="section-title">Unloading Details</div>
+    <div class="form-row">
+      <div class="form-col">
+        <label for="unloadingRate">Unloading Rate (Rs.)</label>
+        <input type="number" id="unloadingRate" placeholder="Enter unloading rate" oninput="this.setAttribute('value', this.value)" />
+      </div>
+      <div class="form-col">
+        <label for="unloadingType">Unloading Type</label>
+        <select id="unloadingType" onchange="toggleUnloadingBagsField()">
+          <option value="">Select Type</option>
+          <option value="bag">Per Bag</option>
+          <option value="quintal">Per Quintal</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row" id="unloadingBagsRow" style="display: none;">
+      <div class="form-col">
+        <label for="unloadingBags">Number of Bags</label>
+        <input type="number" id="unloadingBags" placeholder="Enter number of bags" oninput="this.setAttribute('value', this.value)" />
       </div>
     </div>
 
@@ -541,6 +573,12 @@
 
     let resultData = {};
 
+    function toggleUnloadingBagsField() {
+      const unloadingType = document.getElementById('unloadingType').value;
+      const unloadingBagsRow = document.getElementById('unloadingBagsRow');
+      unloadingBagsRow.style.display = unloadingType === 'bag' ? 'flex' : 'none';
+    }
+
     function calculateTrader() {
       // Validate required fields
       const trader = document.getElementById('trader').value.trim();
@@ -551,6 +589,11 @@
       const commission = document.getElementById('commission').value.trim() || 0;
       const advance = document.getElementById('advance').value.trim() || 0;
       const deduction = document.getElementById('deduction').value.trim() || 0;
+      const weighBridgeAmount = parseFloat(document.getElementById('weighBridgeAmount').value.trim()) || 0;
+      const gmValue = parseFloat(document.getElementById('gmValue').value.trim()) || 0;
+      const unloadingRate = parseFloat(document.getElementById('unloadingRate').value.trim()) || 0;
+      const unloadingType = document.getElementById('unloadingType').value;
+      const unloadingBags = parseFloat(document.getElementById('unloadingBags').value.trim()) || 0;
 
       const requiredFields = [
         { id: 'trader', name: 'Trader Name' },
@@ -575,10 +618,21 @@
       const shootValue = Math.ceil((parseFloat(weighBridge) * parseFloat(shoot)) / 1000); // Round up shoot
       const netWeightKg = parseFloat(weighBridge) - shootValue;
       const netWeightQuintal = netWeightKg / 100;
-      const netTotal = netWeightQuintal * parseFloat(price);
+
+      // Calculate unloading charges
+      let unloadingCharges = 0;
+      if (unloadingRate > 0) {
+        if (unloadingType === 'bag') {
+          unloadingCharges = unloadingRate * unloadingBags;
+        } else if (unloadingType === 'quintal') {
+          unloadingCharges = unloadingRate * netWeightQuintal;
+        }
+      }
+
+      const netTotal = netWeightQuintal * parseFloat(price) - unloadingCharges; // Subtract unloading charges
       const commissionValue = netWeightQuintal * parseFloat(commission);
       const netTotalAfterCC = netTotal - (parseFloat(cc) / 100 * netTotal) - commissionValue;
-      const totalAmount = netTotalAfterCC - parseFloat(advance) - parseFloat(deduction);
+      const totalAmount = netTotalAfterCC - weighBridgeAmount - gmValue - parseFloat(advance) - parseFloat(deduction);
 
       resultData = {
         trader,
@@ -588,9 +642,12 @@
         netWeightQuintal,
         price: parseFloat(price),
         netTotal,
+        unloadingCharges,
         ccValue: (parseFloat(cc) / 100 * netTotal),
         commissionValue,
         netTotalAfterCC,
+        weighBridgeAmount,
+        gmValue,
         advance: parseFloat(advance),
         deduction: parseFloat(deduction),
         totalAmount
@@ -604,10 +661,13 @@
         <p><strong>Shoot (Rounded):</strong> ${shootValue} kg</p>
         <p><strong>Net Weight:</strong> ${netWeightKg.toFixed(2)} kg (${netWeightQuintal.toFixed(2)} Quintals)</p>
         <p><strong>Price per Quintal:</strong> Rs. ${price}</p>
+        <p><strong>Unloading Charges:</strong> Rs. ${unloadingCharges.toFixed(2)}</p>
         <p><strong>Net Total:</strong> Rs. ${netTotal.toFixed(2)}</p>
         <p><strong>CC Value:</strong> Rs. ${resultData.ccValue.toFixed(2)}</p>
         <p><strong>Commission Value:</strong> Rs. ${commissionValue.toFixed(2)}</p>
         <p><strong>Net Amount after CC and Commission:</strong> Rs. ${netTotalAfterCC.toFixed(2)}</p>
+        <p><strong>Weigh Bridge Amount:</strong> Rs. ${weighBridgeAmount}</p>
+        <p><strong>GM Value:</strong> Rs. ${gmValue}</p>
         <p><strong>Advance Paid:</strong> Rs. ${advance}</p>
         <p><strong>Deductions:</strong> Rs. ${deduction}</p>
         <div class="amount-badge">Final Payable Amount: Rs. ${totalAmount.toFixed(2)}</div>
@@ -644,17 +704,20 @@
       const lines = [
         ["Date", date],
         ["Trader Name", trader],
-        ["Weigh Bridge (kg)", resultData.weighBridge],
-        ["Shoot (Rounded)", `${resultData.shootValue} kg`],
+        ["Weigh Bridge (kg)", `${resultData.weighBridge.toFixed(2)} kg`],
+        ["Shoot", `${resultData.shootValue} kg`],
         ["Net Weight (kg)", `${resultData.netWeightKg.toFixed(2)} kg`],
-        ["Net Weight (Quintals)", `${resultData.netWeightQuintal.toFixed(2)}`],
+        // ["Net Weight (Quintals)", `${resultData.netWeightQuintal.toFixed(2)}`],
         ["Price per Quintal", `Rs. ${resultData.price}`],
-        ["Net Total", `Rs. ${resultData.netTotal.toFixed(2)}`],
-        ["CC Value", `Rs. ${resultData.ccValue.toFixed(2)}`],
-        ["Commission Value", `Rs. ${resultData.commissionValue.toFixed(2)}`],
-        ["Net Amount after CC and Commission", `Rs. ${resultData.netTotalAfterCC.toFixed(2)}`],
-        ["Advance Paid", `Rs. ${resultData.advance}`],
-        ["Deductions", `Rs. ${resultData.deduction}`],
+        ...(resultData.unloadingCharges > 0 ? [["Unloading Charges", `Rs. ${resultData.unloadingCharges.toFixed(2)}`]] : []),
+        ["Total Amount", `Rs. ${resultData.netTotal.toFixed(2)}`],
+        ...(resultData.ccValue > 0 ? [["CC Value", `Rs. ${resultData.ccValue.toFixed(2)}`]] : []),
+        ...(resultData.commissionValue > 0 ? [["Commission Value", `Rs. ${resultData.commissionValue.toFixed(2)}`]] : []),
+        ["Net Total Amount", `Rs. ${resultData.netTotalAfterCC.toFixed(2)}`],
+        ...(resultData.weighBridgeAmount > 0 ? [["Weigh Bridge Amount", `Rs. ${resultData.weighBridgeAmount}`]] : []),
+        ...(resultData.gmValue > 0 ? [["GM Value", `Rs. ${resultData.gmValue}`]] : []),
+        ...(resultData.advance > 0 ? [["Advance Paid", `Rs. ${resultData.advance}`]] : []),
+        ...(resultData.deduction > 0 ? [["Deductions", `Rs. ${resultData.deduction}`]] : []),
         ["Final Payable Amount", `Rs. ${resultData.totalAmount.toFixed(2)}`]
       ];
 
@@ -664,7 +727,7 @@
 
       doc.setFontSize(16);
       doc.setFont("helvetica", "bold");
-      doc.text("Trader Payment Calculation", 105, 15, { align: "center" });
+      doc.text("Receipt", 105, 15, { align: "center" });
 
       doc.setFontSize(10);
       doc.setFont("helvetica", "bold");
