@@ -497,7 +497,7 @@
 
     <div class="form-row">
       <div class="form-col">
-        <label for="commission">Commission Charge (%)</label>
+        <label for="commission">CC (%)</label>
         <input type="number" id="commission" value="1" placeholder="CC percentage" oninput="this.setAttribute('value', this.value)" />
       </div>
       <div class="form-col">
@@ -563,7 +563,7 @@
         { id: 'weight', name: 'Weight per Bag' },
         { id: 'rate', name: 'Rate per Quintal' },
         { id: 'hamaliRate', name: 'Hamali per Bag' },
-        { id: 'commission', name: 'Commission Charge' },
+        { id: 'commission', name: 'CC' },
         { id: 'advance', name: 'Advance Paid' }
       ];
 
@@ -627,7 +627,7 @@
         <p><strong>Gross Amount:</strong> Rs. ${gross.toFixed(2)}</p>
         <p><strong>Hamali:</strong> Rs. ${hamali.toFixed(2)}</p>
         <p><strong>Net Amount:</strong> Rs. ${net.toFixed(2)}</p>
-        <p><strong>Commission (${commission}%):</strong> Rs. ${commissionAmount.toFixed(2)}</p>
+        <p><strong>CC (${commission}%):</strong> Rs. ${commissionAmount.toFixed(2)}</p>
         <p><strong>Advance Paid:</strong> Rs. ${advance}</p>
         <div class="amount-badge">Final Payable Amount: Rs. ${final.toFixed(2)}</div>
       `;
@@ -669,7 +669,7 @@
         ["Gross Amount", `Rs. ${resultData.gross.toFixed(2)}`],
         ["Hamali", `Rs. ${resultData.hamali.toFixed(2)}`],
         ["Net Amount", `Rs. ${resultData.net.toFixed(2)}`],
-        [`Commission (${resultData.commission}%)`, `Rs. ${resultData.commissionAmount.toFixed(2)}`],
+        [`CC (${resultData.commission}%)`, `Rs. ${resultData.commissionAmount.toFixed(2)}`],
         ["Advance Paid", `Rs. ${resultData.advance.toFixed(2)}`],
         ["Final Payable Amount", `Rs. ${resultData.final.toFixed(2)}`]
       ];
@@ -704,4 +704,4 @@
     }
   </script>
 </body>
-</html>test
+</html>
