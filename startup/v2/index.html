@@ -570,8 +570,19 @@
       for (const field of requiredFields) {
         const value = document.getElementById(field.id).value.trim();
         if (!value) {
-          alert(`Please fill in the ${field.name} field.`);
-          document.getElementById(field.id).focus();
+          //alert(`Please fill in the ${field.name} field.`);
+          document.getElementById('loadingSpinner').style.display = 'block';
+		      document.getElementById('modalContent').style.display = 'none';
+		      document.getElementById('closeModalBtn').style.display = 'none';
+		      document.getElementById('modalOverlay').style.display = 'block';
+		      document.getElementById('modal').style.display = 'block';
+          
+		       document.getElementById('loadingSpinner').style.display = 'none';
+		       document.getElementById('modalContent').style.display = 'block';
+		       document.getElementById('closeModalBtn').style.display = 'block';
+		       document.getElementById('modalContent').innerText = `Please fill in the ${field.name} field.`;
+		       document.getElementById(field.id).focus();
+          
           return;
         }
       }
