@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sprint Tickets Management</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    :root {
+      --bg-color: linear-gradient(135deg, #ffecd2, #fcb69f);
+      --text-color: #2c3e50;
+      --card-bg: #ffffff;
+      --button-bg: linear-gradient(135deg, #ff7e5f, #feb47b);
+      --button-text: #ffffff;
+      --card-shadow: rgba(0, 0, 0, 0.08);
+      --border-radius: 12px;
+      --input-border: #e0e6ed;
+      --input-focus: #ff7e5f;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .container {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 1rem;
+      width: 90%;
+      max-width: 1000px;
+      background-color: var(--card-bg);
+      box-shadow: 0 10px 30px var(--card-shadow);
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      margin: 2rem auto;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--button-bg);
+      margin-bottom: 1.5rem;
+    }
+
+    #employeeList {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    .user {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1rem;
+      border: 1px solid var(--input-border);
+      border-radius: var(--border-radius);
+      background-color: var(--card-bg);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .user:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .user-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .ticket {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border: 1px solid var(--input-border);
+      border-radius: var(--border-radius);
+      background-color: var(--bg-color);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .ticket:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .ticket-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ac-point {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      border: 1px solid var(--input-border);
+      border-radius: var(--border-radius);
+      background-color: var(--card-bg);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .ac-point:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .ac-point input {
+      flex: 1;
+    }
+
+    button {
+      padding: 0.3rem 0.6rem;
+      background: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #feb47b, #ff7e5f);
+      transform: scale(1.05);
+    }
+
+    input {
+      width: calc(100% - 2rem);
+      padding: 0.5rem;
+      margin: 0.5rem 0;
+      border: 1px solid var(--input-border);
+      border-radius: var(--border-radius);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input:focus {
+      border-color: var(--input-focus);
+      box-shadow: 0 0 5px var(--input-focus);
+      outline: none;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Sprint Tickets Management</h1>
+    <div id="employeeList"></div>
+    <button onclick="addUser()">Add User</button>
+    <button onclick="generateReport()">Generate Report</button>
+  </div>
+
+  <script>
+    let employeeCount = 0;
+
+    function addUser() {
+      employeeCount++;
+      const userId = `user-${employeeCount}`;
+      const userDiv = document.createElement('div');
+      userDiv.className = 'user';
+      userDiv.id = userId;
+      userDiv.innerHTML = `
+        <div class="user-header">
+          <input type="text" value="User ${employeeCount}" 
+                 oninput="updateUserName('${userId}', this.value)" />
+          <button onclick="deleteUser('${userId}')">-</button>
+        </div>
+        <div id="${userId}-tickets" class="tickets-grid"></div>
+        <button onclick="addTicket('${userId}')">Add Ticket</button>
+      `;
+      document.getElementById('employeeList').appendChild(userDiv);
+    }
+
+    function updateUserName(userId, newName) {
+      document.querySelector(`#${userId} .user-header input`).value = newName;
+    }
+
+    function deleteUser(userId) {
+      document.getElementById(userId).remove();
+    }
+
+    function addTicket(userId) {
+      const ticketCount = document.querySelectorAll(`#${userId} .ticket`).length + 1;
+      const ticketId = `${userId}-ticket-${ticketCount}`;
+      const ticketDiv = document.createElement('div');
+      ticketDiv.className = 'ticket';
+      ticketDiv.id = ticketId;
+      ticketDiv.innerHTML = `
+        <div class="ticket-actions">
+          <input type="text" value="Ticket ${ticketCount}" 
+                 oninput="updateTicketName('${ticketId}', this.value)" />
+          <button onclick="deleteTicket('${ticketId}')">-</button>
+        </div>
+        <div id="${ticketId}-ac-points" class="ac-points-grid"></div>
+        <button onclick="addACPoint('${ticketId}')">Add AC Point</button>
+      `;
+      document.getElementById(`${userId}-tickets`).appendChild(ticketDiv);
+    }
+
+    function updateTicketName(ticketId, newName) {
+      document.querySelector(`#${ticketId} .ticket-actions input`).value = newName;
+    }
+
+    function deleteTicket(ticketId) {
+      document.getElementById(ticketId).remove();
+    }
+
+    function addACPoint(ticketId) {
+      const acDiv = document.createElement('div');
+      acDiv.className = 'ac-point';
+      acDiv.innerHTML = `
+        <input type="text" placeholder="Enter AC point">
+        <button onclick="deleteACPoint(this)">-</button>
+      `;
+      document.getElementById(`${ticketId}-ac-points`).appendChild(acDiv);
+    }
+
+    function deleteACPoint(button) {
+      button.parentElement.remove();
+    }
+
+    async function generateReport() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      let yPosition = 10; // Starting Y position for the PDF content
+      const users = document.querySelectorAll('.user');
+      users.forEach((user, userIndex) => {
+        const userName = user.querySelector('.user-header input').value;
+        doc.text(`User ${userIndex + 1}: ${userName}`, 10, yPosition);
+        yPosition += 10;
+
+        const tickets = user.querySelectorAll('.ticket');
+        tickets.forEach((ticket, ticketIndex) => {
+          const ticketName = ticket.querySelector('.ticket-actions input').value;
+          doc.text(`  - Ticket ${ticketIndex + 1}: ${ticketName}`, 20, yPosition);
+          yPosition += 10;
+
+          const acPoints = ticket.querySelectorAll('.ac-point input');
+          acPoints.forEach((acPoint) => {
+            const acValue = acPoint.value || 'No value';
+            doc.text(`    - ${acValue}`, 30, yPosition);
+            yPosition += 10;
+          });
+        });
+      });
+
+      doc.save('SprintTicketsReport.pdf');
+    }
+  </script>
+</body>
+</html>
