@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paddy Expense Calculator</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Fix alignment issue at the top */
+            height: 100vh;
+            overflow: hidden;
+            overflow-y: auto; /* Enable vertical scrolling */
+            scroll-behavior: smooth; /* Enable smooth scrolling */
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            width: 90%; /* Adjust width for better responsiveness */
+            max-width: 600px; /* Limit maximum width */
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping for smaller screens */
+            gap: 30px; /* Further increase gap between fields */
+        }
+
+        .form-row .form-group {
+            flex: 1 1 calc(50% - 30px); /* Adjust width to account for the increased gap */
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+            font-size: 16px;
+        }
+
+        input:focus, select:focus {
+            box-shadow: 0 0 5px #6a11cb;
+        }
+
+        button {
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #feb47b, #ff7e5f);
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Paddy Expense Calculator</h1>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="bags">Number of Bags</label>
+                <input type="number" id="bags" placeholder="Enter number of bags">
+            </div>
+            <div class="form-group">
+                <label for="bagQuantity">Bag Quantity (kg)</label>
+                <input type="number" id="bagQuantity" placeholder="Enter bag quantity in kg">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="bagPrice">Bag Price (per bag)</label>
+                <input type="number" id="bagPrice" placeholder="Enter bag price per bag">
+            </div>
+            <div class="form-group">
+                <label for="freeKgPerBag">Free Kg per Bag</label>
+                <input type="number" id="freeKgPerBag" placeholder="Enter free kg per bag">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="transport">Transport Charge (per bag)</label>
+                <input type="number" id="transport" placeholder="Enter transport charge per bag">
+            </div>
+            <div class="form-group">
+                <label for="loading">Loading Charge (per bag)</label>
+                <input type="number" id="loading" placeholder="Enter loading charge per bag">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="marketFee">Market Fee (in percentage)</label>
+                <input type="number" id="marketFee" placeholder="Enter market fee percentage">
+            </div>
+            <div class="form-group">
+                <label for="paddyPrice">Paddy Price (per kg)</label>
+                <input type="number" id="paddyPrice" placeholder="Enter paddy price per kg">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="unloading">Unloading Charge (per bag)</label>
+                <input type="number" id="unloading" placeholder="Enter unloading charge per bag">
+            </div>
+            <div class="form-group">
+                <label for="cc">CC (in percentage)</label>
+                <input type="number" id="cc" placeholder="Enter CC percentage">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="lorryLoading">Lorry Loading Charge</label>
+                <input type="number" id="lorryLoading" placeholder="Enter lorry loading charge">
+            </div>
+            <div class="form-group">
+                <label for="lorryLoadingType">Lorry Loading Charge Type</label>
+                <select id="lorryLoadingType">
+                    <option value="bag">Per Bag</option>
+                    <option value="quintal">Per Quintal</option>
+                </select>
+            </div>
+        </div>
+        <button onclick="calculateExpense()">Calculate Expense</button>
+        <div class="result" id="result"></div>
+        <div class="result" id="expensePerQuintal"></div>
+    </div>
+
+    <script>
+        function calculateExpense() {
+            const bags = parseFloat(document.getElementById('bags').value) || 0;
+            const bagQuantity = parseFloat(document.getElementById('bagQuantity').value) || 66; // Default to 66 kg
+            const freeKgPerBag = parseFloat(document.getElementById('freeKgPerBag').value) || 1; // Default to 1 kg
+            const bagPrice = parseFloat(document.getElementById('bagPrice').value) || 0;
+            const transport = parseFloat(document.getElementById('transport').value) || 0;
+            const loading = parseFloat(document.getElementById('loading').value) || 0;
+            const unloading = parseFloat(document.getElementById('unloading').value) || 0;
+            const paddyPrice = parseFloat(document.getElementById('paddyPrice').value) || 0;
+            const marketFeePercentage = parseFloat(document.getElementById('marketFee').value) || 0;
+            const ccPercentage = parseFloat(document.getElementById('cc').value) || 0;
+            const lorryLoading = parseFloat(document.getElementById('lorryLoading').value) || 0;
+            const lorryLoadingType = document.getElementById('lorryLoadingType').value;
+
+            const quintalConversionFactor = 100 / bagQuantity; // Conversion factor from bag to quintal
+            const totalWeight = bags * bagQuantity; // Total weight in kg
+            const totalQuintals = totalWeight / 100; // Total weight in quintals
+
+            // Calculate per quintal values
+            const bagPricePerQuintal = bagPrice * quintalConversionFactor;
+            const transportPerQuintal = transport * quintalConversionFactor;
+            const loadingPerQuintal = loading * quintalConversionFactor;
+            const unloadingPerQuintal = unloading * quintalConversionFactor;
+
+            // Lorry loading cost logic
+            const lorryLoadingPerQuintal = lorryLoadingType === "bag" 
+                ? lorryLoading * quintalConversionFactor 
+                : lorryLoading;
+
+            // Additions
+            const freePaddyValuePerBag = freeKgPerBag * paddyPrice; // Free paddy value per bag
+            const freePaddyValuePerQuintal = freePaddyValuePerBag * quintalConversionFactor;
+            const marketFeePerQuintal = paddyPrice * 100 * (marketFeePercentage / 100); // Market fee per quintal
+            const ccPerQuintal = paddyPrice * 100 * (ccPercentage / 100); // CC per quintal
+
+            // Total expense calculation
+            const totalBagCost = bags * bagPrice;
+            const totalTransportCost = totalQuintals * transportPerQuintal;
+            const totalLoadingCost = totalQuintals * loadingPerQuintal;
+            const totalUnloadingCost = totalQuintals * unloadingPerQuintal;
+            const totalLorryLoadingCost = totalQuintals * lorryLoadingPerQuintal;
+
+            const totalExpense = totalBagCost + totalTransportCost + totalLoadingCost + totalUnloadingCost + totalLorryLoadingCost + marketFeePerQuintal * totalQuintals - freePaddyValuePerQuintal * totalQuintals - ccPerQuintal * totalQuintals;
+
+            const expensePerQuintal = totalExpense / totalQuintals; // Expense per quintal
+
+            document.getElementById('result').innerText = `Total Expense: ₹${totalExpense.toFixed(2)}`;
+            document.getElementById('expensePerQuintal').innerText = `Expense per Quintal: ₹${expensePerQuintal.toFixed(2)}`;
+
+            // Scroll to the top after calculation
+            window.scrollTo({ top: 0 });
+        }
+    </script>
+</body>
+</html>
