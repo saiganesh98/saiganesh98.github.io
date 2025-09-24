@@ -308,5 +308,109 @@ public class CustomSortObjects {
     }
 }
 
+Ahh I see 👍 you’re asking **when to use things like `Integer.compare()` vs `a - b` vs `s.marks` vs `compareTo()`** while sorting different data types. Let’s break it down clearly:
+
+---
+
+## 🔹 1. Sorting **Integers**
+
+Java has wrapper class `Integer` which implements `Comparable<Integer>`.
+
+✅ Ways to compare:
+
+```java
+// Ascending
+numbers.sort((a, b) -> Integer.compare(a, b));
+
+// Descending
+numbers.sort((a, b) -> Integer.compare(b, a));
+
+// OR (not recommended for big numbers, can overflow)
+numbers.sort((a, b) -> a - b);
+```
+
+👉 `Integer.compare(a, b)` is **safe**, no risk of overflow.
+👉 `a - b` works, but risky if values are huge (like `Integer.MAX_VALUE - (-1)`).
+
+---
+
+## 🔹 2. Sorting **Strings**
+
+`String` implements `Comparable<String>` → uses **lexicographic order** (dictionary order).
+
+✅ Ways to compare:
+
+```java
+// Ascending (A-Z)
+list.sort((s1, s2) -> s1.compareTo(s2));
+
+// Descending (Z-A)
+list.sort((s1, s2) -> s2.compareTo(s1));
+```
+
+👉 `compareTo()` returns:
+
+* Negative if `s1 < s2`
+* Zero if equal
+* Positive if `s1 > s2`
+
+---
+
+## 🔹 3. Sorting **Booleans**
+
+`Boolean` also implements `Comparable<Boolean>`.
+
+* `false < true` (false is treated as 0, true as 1).
+
+✅ Ways to compare:
+
+```java
+List<Boolean> list = Arrays.asList(true, false, true, false);
+
+// Ascending: false first, true later
+list.sort((b1, b2) -> Boolean.compare(b1, b2));
+
+// Descending: true first, false later
+list.sort((b1, b2) -> Boolean.compare(b2, b1));
+```
+
+👉 Output (Ascending): `[false, false, true, true]`
+👉 Output (Descending): `[true, true, false, false]`
+
+---
+
+## 🔹 4. Sorting **Objects by Field**
+
+When sorting objects (like `Student` with `marks` and `name`), you compare their **fields**:
+
+```java
+// By marks (int field)
+students.sort((s1, s2) -> Integer.compare(s1.marks, s2.marks));
+
+// By name (String field)
+students.sort((s1, s2) -> s1.name.compareTo(s2.name));
+```
+
+👉 Here `s1.marks` is an `int`, so we use `Integer.compare(...)`.
+👉 `s1.name` is a `String`, so we use `.compareTo(...)`.
+
+---
+
+## 🔹 Rule of Thumb
+
+* For **numbers** → use `Integer.compare(x, y)` (safe).
+* For **strings** → use `s1.compareTo(s2)` (lexicographic).
+* For **booleans** → use `Boolean.compare(b1, b2)` (`false < true`).
+* For **objects** → extract the field and use the right comparison method (`compareTo` for `String`, `Integer.compare` for numbers, etc.).
+
+---
+
+⚡ That’s why you saw me sometimes using `Integer.compare(...)` and sometimes `s1.name.compareTo(...)` → it depends on the **data type of the field** being compared.
+
+---
+
+
+
+
 **/
 
