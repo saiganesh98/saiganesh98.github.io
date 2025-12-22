@@ -1,195 +1,580 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloud To-Do List</title>
-    <style>
-        /* Modern UI Styling */
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            margin: 0;
-            padding-top: 50px;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cloud To-Do List — Modern</title>
 
-        .todo-container {
-            background: white;
-            width: 90%;
-            max-width: 400px;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
+  <style>
+    /* Page layout */
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --accent:#7c9cff;
+      --muted:#9aa6c3;
+      --glass: rgba(255,255,255,0.03);
+      --success: #34d399;
+      --danger: #fb7185;
+      --yellow: #fbbf24;
+      --glass-border: rgba(255,255,255,0.06);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:
+        radial-gradient(800px 400px at 10% 20%, rgba(124,156,255,0.08), transparent 8%),
+        radial-gradient(600px 300px at 90% 80%, rgba(250,200,100,0.04), transparent 8%),
+        var(--bg);
+      color: #e6eef8;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:48px 18px;
+    }
 
-        h2 { 
-            color: #1a73e8; 
-            margin-top: 0; 
-            text-align: center;
-            font-weight: 600;
-        }
+    .container {
+      width:100%;
+      max-width:920px;
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:24px;
+      align-items:start;
+    }
 
-        .input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
+    /* Main card */
+    .todo-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid var(--glass-border);
+      padding:22px;
+      border-radius:14px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      min-height:420px;
+      position:relative;
+      overflow:hidden;
+    }
 
-        input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            outline: none;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
+    header h1{
+      margin:0 0 6px 0;
+      font-size:20px;
+      letter-spacing:0.2px;
+      color: white;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    header p{margin:0;color:var(--muted);font-size:13px}
 
-        input:focus { border-color: #1a73e8; }
+    /* Input group */
+    .input-row{
+      display:flex;
+      gap:10px;
+      margin-top:14px;
+      margin-bottom:18px;
+    }
+    .input-row input[type="text"],
+    .input-row input[type="date"],
+    .input-row select{
+      background:var(--glass);
+      border:1px solid var(--glass-border);
+      color:inherit;
+      padding:10px 12px;
+      border-radius:10px;
+      outline:none;
+      font-size:14px;
+      transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .input-row input[type="text"]:focus,
+    .input-row input[type="date"]:focus,
+    .input-row select:focus{ box-shadow:0 6px 20px rgba(12,18,30,0.4); transform:translateY(-2px); border-color:var(--accent); }
 
-        button#addBtn {
-            background: #1a73e8;
-            color: white;
-            border: none;
-            padding: 0 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
+    button#addBtn{
+      background: linear-gradient(180deg,var(--accent), #486fe9);
+      border: none;
+      color:white;
+      padding:0 14px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+      transition:transform .12s ease, box-shadow .12s ease;
+    }
+    button#addBtn:active{ transform:translateY(1px); }
 
-        button#addBtn:hover { background: #1557b0; }
+    /* List */
+    .controls{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:8px;
+    }
+    .filters{display:flex;gap:8px}
+    .filters button{
+      background:transparent;
+      color:var(--muted);
+      border:1px solid transparent;
+      padding:6px 10px;
+      border-radius:8px;
+      font-size:13px;
+      cursor:pointer;
+    }
+    .filters button.active{
+      color:white;
+      background:linear-gradient(90deg, rgba(124,156,255,0.12), rgba(250,200,100,0.06));
+      border:1px solid rgba(255,255,255,0.04);
+    }
 
-        #list { 
-            list-style: none; 
-            padding: 0; 
-            margin: 0;
-        }
+    #list{
+      list-style:none;
+      padding:0;
+      margin:12px 0 0 0;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      max-height:420px;
+      overflow:auto;
+    }
 
-        li {
-            background: #fff;
-            border-bottom: 1px solid #f1f1f1;
-            padding: 15px 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            animation: fadeIn 0.3s ease;
-        }
+    .task{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      border:1px solid var(--glass-border);
+      padding:12px;
+      border-radius:10px;
+      transition:transform .12s ease, box-shadow .12s ease;
+    }
+    .task:hover{ transform:translateY(-3px); box-shadow:0 18px 30px rgba(2,6,23,0.6); }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .left{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      width:100%;
+    }
 
-        li:last-child { border-bottom: none; }
+    .checkbox{
+      width:18px;
+      height:18px;
+      border-radius:6px;
+      border:1px solid rgba(255,255,255,0.08);
+      display:inline-grid;
+      place-items:center;
+      cursor:pointer;
+      background:transparent;
+      flex-shrink:0;
+    }
+    .checkbox.checked{
+      background: linear-gradient(90deg,var(--success), #21b07a);
+      border:none;
+      box-shadow:0 6px 20px rgba(33,176,122,0.12);
+    }
+    .task-title{
+      font-size:14px;
+      color: #eaf0ff;
+      word-break:break-word;
+    }
+    .task-title.completed{
+      text-decoration:line-through;
+      opacity:0.6;
+    }
 
-        .delete-btn {
-            background: #fff0f0;
-            color: #d93025;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
-            transition: 0.2s;
-        }
+    .meta{
+      margin-left:auto;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .badge{
+      padding:6px 8px;
+      border-radius:999px;
+      font-weight:700;
+      font-size:12px;
+      color:#07203a;
+    }
+    .badge.low{ background:#fef3c7; color:#7c4e00; }
+    .badge.medium{ background:#fce7f3; color:#6c1d5b; }
+    .badge.high{ background:#fee2e2; color:#7c0d12; }
 
-        .delete-btn:hover {
-            background: #d93025;
-            color: white;
-        }
+    .action-btn{
+      background:transparent;
+      border:1px solid transparent;
+      color:var(--muted);
+      padding:6px 8px;
+      border-radius:8px;
+      cursor:pointer;
+    }
+    .action-btn.danger{ color:var(--danger) }
 
-        .empty-msg {
-            text-align: center;
-            color: #888;
-            font-style: italic;
-            margin-top: 20px;
-        }
-    </style>
+    .empty{
+      text-align:center;
+      color:var(--muted);
+      padding:30px 10px;
+      font-style:italic;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      border: 1px solid var(--glass-border);
+      padding:18px;
+      border-radius:14px;
+      height:fit-content;
+    }
+    .stats{display:flex;gap:8px;flex-direction:column}
+    .progress{
+      height:10px;
+      background:rgba(255,255,255,0.03);
+      border-radius:999px;
+      overflow:hidden;
+      margin-top:8px;
+    }
+    .progress > i{ display:block; height:100%; background:linear-gradient(90deg,var(--accent), #fbbf24); width:0% }
+
+    footer{
+      margin-top:14px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* small screens */
+    @media (max-width:900px){
+      .container{ grid-template-columns: 1fr; }
+      .sidebar{ order:2 }
+    }
+
+    /* subtle add animation */
+    @keyframes pop {
+      0%{ transform:scale(.96); opacity:0 }
+      60%{ transform:scale(1.02); opacity:1 }
+      100%{ transform:scale(1) }
+    }
+    .new-task {
+      animation: pop .24s ease;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <main class="todo-card" aria-labelledby="mainTitle">
+      <header>
+        <h1 id="mainTitle">☁️ Cloud To‑Do — My Tasks</h1>
+        <p>Syncs to Firebase in realtime. Add due dates, priorities, edit, complete and filter tasks.</p>
+      </header>
 
-    <div class="todo-container">
-        <h2>My Cloud List</h2>
-        <div class="input-group">
-            <input type="text" id="taskInput" placeholder="What needs to be done?">
-            <button id="addBtn" onclick="addTask()">Add</button>
+      <div class="input-row" style="margin-top:12px">
+        <input id="taskInput" type="text" placeholder="Add a new task (press Enter)" aria-label="New task">
+        <select id="prioritySelect" aria-label="Priority">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+        </select>
+        <input id="dueDate" type="date" aria-label="Due date">
+        <button id="addBtn" title="Add task">Add</button>
+      </div>
+
+      <div class="controls">
+        <div class="filters" role="tablist" aria-label="Filters">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="active">Active</button>
+          <button class="filter-btn" data-filter="completed">Completed</button>
         </div>
-        <ul id="list">
-            </ul>
-    </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span id="count" style="color:var(--muted);font-size:13px">0 tasks</span>
+          <button id="clearCompleted" class="action-btn" title="Clear completed">Clear completed</button>
+        </div>
+      </div>
 
-    <script type="module">
-		import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-        import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
+      <ul id="list" aria-live="polite"></ul>
 
-        // 1. REPLACE THE STUFF BELOW WITH YOUR CONFIG FROM FIREBASE CONSOLE
-const firebaseConfig = {
-apiKey: "AIzaSyBGhJKiMyZQUN8jmfGzkLzxqXerUgPS-Kk",
-authDomain: "todo-app-1c544.firebaseapp.com",
-projectId: "todo-app-1c544",
-storageBucket: "todo-app-1c544.firebasestorage.app",
-messagingSenderId: "1063820861228",
-appId: "1:1063820861228:web:7dd28be1e365f9c13a5689",
-databaseURL: "https://todo-app-1c544-default-rtdb.asia-southeast1.firebasedatabase.app"
-};
+      <footer>
+        <small id="lastUpdate" style="color:var(--muted)">Not connected</small>
+        <small style="color:var(--muted)">Built with ♥</small>
+      </footer>
+    </main>
 
-        // 2. Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        const tasksRef = ref(db, 'tasks');
+    <aside class="sidebar">
+      <h3 style="margin:0 0 8px 0">Overview</h3>
+      <div class="stats">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:13px;color:var(--muted)">Completed</div>
+          <div id="statCompleted" style="font-weight:700">0</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:13px;color:var(--muted)">Active</div>
+          <div id="statActive" style="font-weight:700">0</div>
+        </div>
+        <div style="margin-top:10px">
+          <div style="font-size:13px;color:var(--muted)">Progress</div>
+          <div class="progress" aria-hidden="true"><i id="progressBar"></i></div>
+        </div>
 
-        // 3. Add Task Function
-        window.addTask = function() {
-            const input = document.getElementById('taskInput');
-            const val = input.value.trim();
-            if (val !== "") {
-                push(tasksRef, val); 
-                input.value = '';
-            }
+        <div style="margin-top:12px">
+          <div style="font-size:13px;color:var(--muted)">Quick Tips</div>
+          <ul style="margin:8px 0 0 16px;color:var(--muted);font-size:13px">
+            <li>Double-click title to edit.</li>
+            <li>Click checkbox to toggle complete.</li>
+            <li>Use filters to focus work.</li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getDatabase, ref, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
+
+    // --- Firebase config (kept same as original file) ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGhJKiMyZQUN8jmfGzkLzxqXerUgPS-Kk",
+      authDomain: "todo-app-1c544.firebaseapp.com",
+      projectId: "todo-app-1c544",
+      storageBucket: "todo-app-1c544.firebasestorage.app",
+      messagingSenderId: "1063820861228",
+      appId: "1:1063820861228:web:7dd28be1e365f9c13a5689",
+      databaseURL: "https://todo-app-1c544-default-rtdb.asia-southeast1.firebasedatabase.app"
+    };
+
+    // Initialize
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const tasksRef = ref(db, 'tasks');
+
+    // Local UI state
+    let tasks = {}; // id -> { text, completed, createdAt, priority, dueDate }
+    let filter = 'all';
+
+    // Elements
+    const input = document.getElementById('taskInput');
+    const addBtn = document.getElementById('addBtn');
+    const listEl = document.getElementById('list');
+    const countEl = document.getElementById('count');
+    const statCompleted = document.getElementById('statCompleted');
+    const statActive = document.getElementById('statActive');
+    const progressBar = document.getElementById('progressBar');
+    const lastUpdate = document.getElementById('lastUpdate');
+    const prioritySelect = document.getElementById('prioritySelect');
+    const dueDateInput = document.getElementById('dueDate');
+    const clearCompletedBtn = document.getElementById('clearCompleted');
+
+    // Helpers
+    function fmtDate(d){
+      if(!d) return '';
+      const dt = new Date(d);
+      if (isNaN(dt)) return '';
+      return dt.toLocaleDateString();
+    }
+    function priorityBadgeClass(p){
+      return p === 'low' ? 'badge low' : (p === 'high' ? 'badge high' : 'badge medium');
+    }
+    function makeTaskNode(id, task){
+      const li = document.createElement('li');
+      li.className = 'task' + (task._new ? ' new-task' : '');
+      li.dataset.id = id;
+
+      const left = document.createElement('div');
+      left.className = 'left';
+
+      const cb = document.createElement('div');
+      cb.className = 'checkbox' + (task.completed ? ' checked' : '');
+      cb.title = task.completed ? 'Mark as active' : 'Mark as completed';
+      cb.addEventListener('click', ()=> toggleComplete(id, !task.completed));
+      cb.innerHTML = task.completed ? '✔' : '';
+
+      const title = document.createElement('div');
+      title.className = 'task-title' + (task.completed ? ' completed' : '');
+      title.textContent = task.text || 'Untitled task';
+      title.title = 'Double-click to edit';
+      title.style.cursor = 'text';
+      title.addEventListener('dblclick', ()=> beginEdit(id, title));
+
+      left.appendChild(cb);
+      left.appendChild(title);
+
+      // meta
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+
+      if (task.dueDate){
+        const due = document.createElement('div');
+        due.textContent = fmtDate(task.dueDate);
+        due.style.opacity = 0.9;
+        meta.appendChild(due);
+      }
+
+      const badge = document.createElement('div');
+      badge.className = priorityBadgeClass(task.priority);
+      badge.textContent = (task.priority || 'medium').toUpperCase();
+      meta.appendChild(badge);
+
+      const del = document.createElement('button');
+      del.className = 'action-btn danger';
+      del.textContent = 'Delete';
+      del.title = 'Delete task';
+      del.addEventListener('click', ()=> deleteTask(id));
+
+      meta.appendChild(del);
+
+      li.appendChild(left);
+      li.appendChild(meta);
+
+      return li;
+    }
+
+    // Add Task
+    window.addTask = async function(){
+      const val = input.value.trim();
+      if (!val) {
+        input.focus();
+        return;
+      }
+      const payload = {
+        text: val,
+        completed: false,
+        createdAt: Date.now(),
+        priority: prioritySelect.value || 'medium',
+        dueDate: dueDateInput.value || ''
+      };
+      // push to firebase (object)
+      await push(tasksRef, payload);
+      input.value = '';
+      dueDateInput.value = '';
+      prioritySelect.value = 'medium';
+    };
+
+    addBtn.addEventListener('click', ()=> addTask());
+    input.addEventListener('keypress', (e)=> { if(e.key === 'Enter') addTask(); });
+
+    // Listen to firebase changes
+    onValue(tasksRef, (snapshot)=>{
+      const val = snapshot.val();
+      tasks = val || {};
+      render();
+      lastUpdate.textContent = 'Synced: ' + new Date().toLocaleTimeString();
+    }, (err)=> {
+      lastUpdate.textContent = 'Connection error';
+      console.error('Firebase onValue error', err);
+    });
+
+    // Render tasks according to filter
+    function render(){
+      listEl.innerHTML = '';
+      const ids = Object.keys(tasks);
+      if (ids.length === 0){
+        listEl.innerHTML = '<div class="empty">No tasks yet — add something to get started.</div>';
+      } else {
+        // sort by createdAt ascending
+        ids.sort((a,b)=> (tasks[a].createdAt || 0) - (tasks[b].createdAt || 0));
+        for (const id of ids){
+          const task = tasks[id];
+          // filter
+          if (filter === 'active' && task.completed) continue;
+          if (filter === 'completed' && !task.completed) continue;
+          const node = makeTaskNode(id, task);
+          listEl.appendChild(node);
         }
-      
+      }
+      updateStats();
+    }
 
+    function updateStats(){
+      const all = Object.keys(tasks).length;
+      const completed = Object.values(tasks).filter(t=> t.completed).length;
+      const active = all - completed;
+      countEl.textContent = `${all} task${all!==1 ? 's' : ''}`;
+      statCompleted.textContent = completed;
+      statActive.textContent = active;
+      const pc = all === 0 ? 0 : Math.round((completed/all)*100);
+      progressBar.style.width = pc + '%';
+    }
 
+    // Toggle complete
+    window.toggleComplete = async function(id, to){
+      const t = tasks[id];
+      if (!t) return;
+      const updated = { ...t, completed: !!to };
+      await update(ref(db, 'tasks/' + id), updated);
+    }
 
-      
-      
+    // Delete
+    window.deleteTask = async function(id){
+      if (!confirm('Delete this task?')) return;
+      await remove(ref(db, 'tasks/' + id));
+    }
 
-        // Allow pressing "Enter" key to add task
-        document.getElementById('taskInput').addEventListener("keypress", (e) => {
-            if (e.key === "Enter") addTask();
-        });
+    // Clear completed
+    clearCompletedBtn.addEventListener('click', async ()=>{
+      const completedIds = Object.keys(tasks).filter(id => tasks[id].completed);
+      if (completedIds.length === 0) {
+        alert('No completed tasks to clear.');
+        return;
+      }
+      if (!confirm(`Clear ${completedIds.length} completed task(s)?`)) return;
+      // remove each
+      for (const id of completedIds){
+        await remove(ref(db, 'tasks/' + id));
+      }
+    });
 
-        // 4. Listen for Changes (The "Backend" Sync)
-        onValue(tasksRef, (snapshot) => {
-            const listElement = document.getElementById('list');
-            listElement.innerHTML = ''; 
-            const data = snapshot.val();
-            
-            if (!data) {
-                listElement.innerHTML = '<div class="empty-msg">No tasks yet!</div>';
-                return;
-            }
-
-            for (let id in data) {
-                let li = document.createElement('li');
-                li.innerHTML = `
-                    <span>${data[id]}</span>
-                    <button class="delete-btn" onclick="deleteTask('${id}')">Delete</button>
-                `;
-                listElement.appendChild(li);
-            }
-        });
-
-        // 5. Delete Task Function
-        window.deleteTask = function(id) {
-            remove(ref(db, 'tasks/' + id));
+    // Inline edit
+    async function beginEdit(id, titleEl){
+      const old = tasks[id];
+      if (!old) return;
+      // create input
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = old.text;
+      input.style.width = '100%';
+      input.style.font = 'inherit';
+      input.style.padding = '6px 8px';
+      input.style.borderRadius = '8px';
+      input.style.border = '1px solid rgba(255,255,255,0.06)';
+      titleEl.replaceWith(input);
+      input.focus();
+      // Save on blur or Enter
+      const save = async ()=>{
+        const nv = input.value.trim();
+        if (nv && nv !== old.text) {
+          await update(ref(db, 'tasks/' + id), { ...old, text: nv });
+        } else {
+          // revert (re-render will restore)
+          render();
         }
-    </script>
+      };
+      input.addEventListener('blur', save, { once:true });
+      input.addEventListener('keypress', (e)=>{
+        if (e.key === 'Enter') {
+          input.blur();
+        }
+      });
+    }
+
+    // Filters
+    document.querySelectorAll('.filter-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        filter = btn.dataset.filter;
+        render();
+      });
+    });
+
+    // expose some functions for html nodes
+    window.deleteTask = window.deleteTask;
+    window.toggleComplete = window.toggleComplete;
+
+    // Small UX improvement: show when tasks are new locally (brief)
+    // Not necessary to set _new for firebase-synced items. left as potential extension.
+
+  </script>
 </body>
 </html>
