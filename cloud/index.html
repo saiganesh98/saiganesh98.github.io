@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud To-Do List</title>
+    <style>
+        /* Modern UI Styling */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 50px;
+        }
+
+        .todo-container {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h2 { 
+            color: #1a73e8; 
+            margin-top: 0; 
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            outline: none;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus { border-color: #1a73e8; }
+
+        button#addBtn {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 0 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        button#addBtn:hover { background: #1557b0; }
+
+        #list { 
+            list-style: none; 
+            padding: 0; 
+            margin: 0;
+        }
+
+        li {
+            background: #fff;
+            border-bottom: 1px solid #f1f1f1;
+            padding: 15px 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        li:last-child { border-bottom: none; }
+
+        .delete-btn {
+            background: #fff0f0;
+            color: #d93025;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .delete-btn:hover {
+            background: #d93025;
+            color: white;
+        }
+
+        .empty-msg {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="todo-container">
+        <h2>My Cloud List</h2>
+        <div class="input-group">
+            <input type="text" id="taskInput" placeholder="What needs to be done?">
+            <button id="addBtn" onclick="addTask()">Add</button>
+        </div>
+        <ul id="list">
+            </ul>
+    </div>
+
+    <script type="module">
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
+
+        // 1. REPLACE THE STUFF BELOW WITH YOUR CONFIG FROM FIREBASE CONSOLE
+const firebaseConfig = {
+apiKey: "AIzaSyBGhJKiMyZQUN8jmfGzkLzxqXerUgPS-Kk",
+authDomain: "todo-app-1c544.firebaseapp.com",
+projectId: "todo-app-1c544",
+storageBucket: "todo-app-1c544.firebasestorage.app",
+messagingSenderId: "1063820861228",
+appId: "1:1063820861228:web:7dd28be1e365f9c13a5689",
+databaseURL: "https://todo-app-1c544-default-rtdb.asia-southeast1.firebasedatabase.app"
+};
+
+        // 2. Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const tasksRef = ref(db, 'tasks');
+
+        // 3. Add Task Function
+        window.addTask = function() {
+            const input = document.getElementById('taskInput');
+            const val = input.value.trim();
+            if (val !== "") {
+                push(tasksRef, val); 
+                input.value = '';
+            }
+        }
+      
+
+
+
+      
+      
+
+        // Allow pressing "Enter" key to add task
+        document.getElementById('taskInput').addEventListener("keypress", (e) => {
+            if (e.key === "Enter") addTask();
+        });
+
+        // 4. Listen for Changes (The "Backend" Sync)
+        onValue(tasksRef, (snapshot) => {
+            const listElement = document.getElementById('list');
+            listElement.innerHTML = ''; 
+            const data = snapshot.val();
+            
+            if (!data) {
+                listElement.innerHTML = '<div class="empty-msg">No tasks yet!</div>';
+                return;
+            }
+
+            for (let id in data) {
+                let li = document.createElement('li');
+                li.innerHTML = `
+                    <span>${data[id]}</span>
+                    <button class="delete-btn" onclick="deleteTask('${id}')">Delete</button>
+                `;
+                listElement.appendChild(li);
+            }
+        });
+
+        // 5. Delete Task Function
+        window.deleteTask = function(id) {
+            remove(ref(db, 'tasks/' + id));
+        }
+    </script>
+</body>
+</html>
