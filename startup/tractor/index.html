@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Bag & Quintal Calculator</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; padding: 40px; background-color: #f0f2f5; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 350px; }
+        h2 { margin-top: 0; color: #1a73e8; font-size: 1.4rem; text-align: center; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .input-group { margin-bottom: 1.2rem; }
+        label { display: block; margin-bottom: 6px; font-size: 0.85rem; font-weight: bold; color: #555; }
+        input { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; }
+        input:focus { outline: none; border-color: #1a73e8; background-color: #f8fbff; }
+        .results-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1.5rem; }
+        .result-box { padding: 15px; background: #f8f9fa; border-radius: 8px; text-align: center; border: 1px solid #e9ecef; }
+        .result-box.highlight { background: #e7f3ff; border-color: #bbdefb; }
+        .val { display: block; font-weight: bold; color: #1a73e8; font-size: 1.2rem; margin-top: 5px; }
+        .unit { font-size: 0.7rem; color: #777; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Cost Calculator</h2>
+    
+    <div class="input-group">
+        <label>Total Tractor Cost (₹/$)</label>
+        <input type="number" id="tractorCost" value="1000" oninput="calculate()">
+    </div>
+
+    <div class="input-group">
+        <label>Number of Bags</label>
+        <input type="number" id="bagCount" value="50" oninput="calculate()">
+    </div>
+
+    <div class="input-group">
+        <label>Weight per Bag (kg)</label>
+        <input type="number" id="bagWeight" value="50" oninput="calculate()">
+    </div>
+
+    <div class="results-container">
+        <div class="result-box">
+            <label>Per Bag</label>
+            <span class="val" id="costPerBag">20.00</span>
+        </div>
+        <div class="result-box highlight">
+            <label>Per Quintal</label>
+            <span class="val" id="costPerQuintal">40.00</span>
+            <span class="unit">(100 kg)</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    function calculate() {
+        const tractorCost = parseFloat(document.getElementById('tractorCost').value) || 0;
+        const bagCount = parseFloat(document.getElementById('bagCount').value) || 0;
+        const bagWeight = parseFloat(document.getElementById('bagWeight').value) || 0;
+
+        const costPerBagDisplay = document.getElementById('costPerBag');
+        const costPerQuintalDisplay = document.getElementById('costPerQuintal');
+
+        // Calculate Cost Per Bag
+        if (bagCount > 0) {
+            const perBag = tractorCost / bagCount;
+            costPerBagDisplay.innerText = perBag.toFixed(2);
+        } else {
+            costPerBagDisplay.innerText = "0.00";
+        }
+
+        // Calculate Cost Per Quintal (100kg)
+        const totalWeight = bagCount * bagWeight;
+        if (totalWeight > 0) {
+            const costPerKg = tractorCost / totalWeight;
+            const perQuintal = costPerKg * 100;
+            costPerQuintalDisplay.innerText = perQuintal.toFixed(2);
+        } else {
+            costPerQuintalDisplay.innerText = "0.00";
+        }
+    }
+</script>
+
+</body>
+</html>
