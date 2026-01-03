@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paddy Bill Settlement</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #eef2f3; padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 650px; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h2 { color: #2e7d32; text-align: center; margin-bottom: 25px; text-transform: uppercase; border-bottom: 2px solid #2e7d32; padding-bottom: 10px; }
+        
+        .section { margin-bottom: 20px; border: 1px solid #ddd; padding: 15px; border-radius: 8px; position: relative; }
+        .section-label { position: absolute; top: -10px; left: 15px; background: white; padding: 0 10px; font-weight: bold; color: #2e7d32; font-size: 0.8em; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .input-group { margin-bottom: 10px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.85em; color: #444; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 1rem; }
+        input:focus { border-color: #2e7d32; outline: none; background: #f1f8e9; }
+
+        .btn-calc { width: 100%; background: #2e7d32; color: white; padding: 15px; border: none; border-radius: 8px; font-size: 1.2em; font-weight: bold; cursor: pointer; margin: 10px 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn-calc:hover { background: #1b5e20; }
+
+        .result-box { background: #1a237e; color: white; padding: 20px; border-radius: 10px; margin-top: 10px; }
+        .row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.95em; }
+        .plus { color: #81c784; font-weight: bold; }
+        .minus { color: #ef9a9a; }
+        .row.final { border-top: 2px dashed #fff; padding-top: 10px; margin-top: 10px; color: #ffd600; font-size: 1.5em; font-weight: bold; }
+        
+        .print-btn { background: #607d8b; color: white; width: 100%; padding: 10px; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+
+        @media print { .no-print { display: none; } .container { box-shadow: none; border: 1px solid #000; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Rice Miller - Paddy Settlement Receipt</h2>
+    
+    <div class="section no-print">
+        <span class="section-label">IDENTIFICATION</span>
+        <div class="grid">
+            <div class="input-group">
+                <label>Miller Name</label>
+                <input type="text" id="millerName" placeholder="Enter Mill Name">
+            </div>
+            <div class="input-group">
+                <label>Vehicle Number</label>
+                <input type="text" id="vehicleNum" placeholder="TS 00 XX 0000">
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <span class="section-label">WEIGHT & PRICING</span>
+        <div class="grid">
+            <div class="input-group">
+                <label>Paddy (Quintals)</label>
+                <input type="number" id="quintals" value="0">
+            </div>
+            <div class="input-group">
+                <label>Rate (per Qntl)</label>
+                <input type="number" id="price" value="0">
+            </div>
+            <div class="input-group">
+                <label>Shoot (kg per Qntl)</label>
+                <input type="number" id="shoot" value="0.5">
+            </div>
+            <div class="input-group">
+                <label>No. of Bags</label>
+                <input type="number" id="bags" value="0">
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <span class="section-label">DEDUCTIONS & ADDITIONS</span>
+        <div class="grid">
+            <div class="input-group">
+                <label>Lorry Advance (+) </label>
+                <input type="number" id="advance" value="0">
+            </div>
+            <div class="input-group">
+                <label>Unloading (per Bag)</label>
+                <input type="number" id="unloadingRate" value="10">
+            </div>
+            <div class="input-group">
+                <label>GM Amount</label>
+                <input type="number" id="gm" value="200">
+            </div>
+            <div class="input-group">
+                <label>RTGS Charges</label>
+                <input type="number" id="rtgs" value="200">
+            </div>
+            <div class="input-group">
+                <label>Cash Discount (%)</label>
+                <input type="number" id="cdPercent" value="1">
+            </div>
+            <div class="input-group">
+                <label>Extra Deductions</label>
+                <input type="number" id="other" value="0">
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-calc no-print" onclick="calculate()">CALCULATE FINAL PAYMENT</button>
+
+    <div id="billInfo" style="margin-top:15px; display:none;">
+        <p><strong>Miller:</strong> <span id="dispMiller"></span> | <strong>Vehicle:</strong> <span id="dispVehicle"></span></p>
+    </div>
+
+    <div class="result-box">
+        <div class="row"><span>Gross Value (After Shoot):</span> <span>₹<span id="resGross">0.00</span></span></div>
+        <div class="row minus"><span>(-) Cash Discount:</span> <span>₹<span id="resCD">0.00</span></span></div>
+        <div class="row minus"><span>(-) Unloading Total:</span> <span>₹<span id="resUnloading">0.00</span></span></div>
+        <div class="row minus"><span>(-) GM & RTGS Fees:</span> <span>₹<span id="resFees">0.00</span></span></div>
+        <div class="row minus"><span>(-) Extra Deductions:</span> <span>₹<span id="resOther">0.00</span></span></div>
+        <div class="row plus"><span>(+) Lorry Advance (Miller pays you):</span> <span>₹<span id="resAdvance">0.00</span></span></div>
+        
+        <div class="row final"><span>NET PAYABLE:</span> <span>₹<span id="resFinal">0.00</span></span></div>
+    </div>
+    
+    <button class="print-btn no-print" onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<script>
+function calculate() {
+    // Inputs
+    const qntl = parseFloat(document.getElementById('quintals').value) || 0;
+    const price = parseFloat(document.getElementById('price').value) || 0;
+    const shoot = parseFloat(document.getElementById('shoot').value) || 0;
+    const bags = parseFloat(document.getElementById('bags').value) || 0;
+    const advance = parseFloat(document.getElementById('advance').value) || 0;
+    const unloadRate = parseFloat(document.getElementById('unloadingRate').value) || 0;
+    const gm = parseFloat(document.getElementById('gm').value) || 0;
+    const rtgs = parseFloat(document.getElementById('rtgs').value) || 0;
+    const cdPerc = parseFloat(document.getElementById('cdPercent').value) || 0;
+    const other = parseFloat(document.getElementById('other').value) || 0;
+
+    // 1. Adjusted Weight
+    const netWeight = qntl - (qntl * (shoot / 100));
+    
+    // 2. Gross Value
+    const grossAmount = netWeight * price;
+
+    // 3. Deductions
+    const cdVal = grossAmount * (cdPerc / 100);
+    const unloadVal = bags * unloadRate;
+    const feesVal = gm + rtgs;
+
+    // 4. Final Math: (Gross - Deductions) + Advance
+    const totalDeductions = cdVal + unloadVal + feesVal + other;
+    const finalPayable = (grossAmount - totalDeductions) + advance;
+
+    // UI Update
+    document.getElementById('dispMiller').innerText = document.getElementById('millerName').value || "N/A";
+    document.getElementById('dispVehicle').innerText = document.getElementById('vehicleNum').value || "N/A";
+    document.getElementById('billInfo').style.display = "block";
+
+    document.getElementById('resGross').innerText = grossAmount.toFixed(2);
+    document.getElementById('resCD').innerText = cdVal.toFixed(2);
+    document.getElementById('resUnloading').innerText = unloadVal.toFixed(2);
+    document.getElementById('resFees').innerText = feesVal.toFixed(2);
+    document.getElementById('resOther').innerText = other.toFixed(2);
+    document.getElementById('resAdvance').innerText = advance.toFixed(2);
+    document.getElementById('resFinal').innerText = finalPayable.toFixed(2);
+}
+</script>
+
+</body>
+</html>
