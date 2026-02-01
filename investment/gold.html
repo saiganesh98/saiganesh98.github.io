@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Strategy: Thula & Biscuit Calculator</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; padding: 20px; color: #2c3e50; line-height: 1.6; }
+        .container { max-width: 950px; margin: auto; background: white; padding: 35px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h2 { color: #b8860b; border-bottom: 3px solid #f1f1f1; padding-bottom: 15px; margin-bottom: 25px; text-align: center; }
+        
+        table { width: 100%; border-collapse: collapse; margin-bottom: 25px; background: #fff; }
+        th { text-align: left; background: #f8f9fa; padding: 15px; border-bottom: 2px solid #dee2e6; color: #7f8c8d; text-transform: uppercase; font-size: 0.85em; }
+        td { padding: 12px; border-bottom: 1px solid #eee; }
+        input { width: 100%; padding: 10px; border: 1px solid #dcdde1; border-radius: 6px; box-sizing: border-box; font-size: 1em; }
+        
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; }
+        .add-btn { background: #b8860b; color: white; margin-bottom: 20px; }
+        .calc-btn { background: #2c3e50; color: white; width: 100%; font-size: 1.1em; margin-top: 10px; }
+        .del-btn { background: #fee2e2; color: #dc2626; padding: 8px 12px; font-size: 0.85em; }
+        
+        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 30px; }
+        .box { padding: 25px; border-radius: 12px; border: 1px solid #e0e0e0; }
+        .summary-box { background: #fffdf0; border-color: #f0e68c; }
+        .strategy-box { background: #f0f7ff; border-color: #bae6fd; }
+        
+        .val { font-weight: bold; color: #b8860b; float: right; font-size: 1.1em; }
+        .item { margin-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
+        
+        #planResult { margin-top: 20px; padding: 20px; border-radius: 10px; display: none; border-left: 5px solid #27ae60; background: #ebfaef; }
+        #pnlSection { margin-top: 20px; padding: 20px; border-radius: 10px; display: none; border: 1px solid #ddd; }
+        .profit { background: #e6ffed; border-color: #28a745; color: #155724; }
+        .loss { background: #fff5f5; border-color: #f5c6cb; color: #721c24; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Gold Investment & Averaging Tool</h2>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="margin:0;">1. Portfolio Holdings</h3>
+        <button class="btn add-btn" onclick="addRow()">+ Add New Lot</button>
+    </div>
+
+    <table>
+        <thead><tr><th>Weight (Grams)</th><th>Rate (per 10g)</th><th>Lot Total</th><th>Action</th></tr></thead>
+        <tbody id="tableBody">
+            <tr>
+                <td><input type="number" class="qty" value="200"></td>
+                <td><input type="number" class="rate" value="172300"></td>
+                <td><input type="text" class="lineTotal" readonly style="border:none; background:transparent; font-weight:bold;"></td>
+                <td><button class="btn del-btn" onclick="removeRow(this)">Delete</button></td>
+            </tr>
+            <tr>
+                <td><input type="number" class="qty" value="100"></td>
+                <td><input type="number" class="rate" value="186500"></td>
+                <td><input type="text" class="lineTotal" readonly style="border:none; background:transparent; font-weight:bold;"></td>
+                <td><button class="btn del-btn" onclick="removeRow(this)">Delete</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="grid-layout">
+        <div class="box summary-box">
+            <h3 style="margin-top:0">Portfolio Summary</h3>
+            <div class="item">Total Weight: <span id="totalWeight" class="val">0 g</span></div>
+            <div class="item">Total Value: <span id="totalInvestment" class="val">₹0</span></div>
+            <div class="item" style="border:none;"><strong>Current Avg (10g):</strong> <span id="weightedAvg" class="val">₹0</span></div>
+        </div>
+
+        <div class="box strategy-box">
+            <h3 style="margin-top:0">Strategy Target</h3>
+            <div class="item"><label>Today's Market Rate (10g):</label><input type="number" id="todayRate" placeholder="Enter current rate"></div>
+            <div class="item"><label>Target Average (10g):</label><input type="number" id="targetAvg" placeholder="Enter target average"></div>
+            <button class="btn calc-btn" onclick="executePlan()">Recalculate Plan</button>
+        </div>
+    </div>
+
+    <div id="planResult">
+        <strong style="color: #1e8449; font-size: 1.2em;">Strategic Buy Plan:</strong>
+        <div id="unitBreakdown" style="font-size: 1.1em; margin-top:10px;"></div>
+    </div>
+
+    <div id="pnlSection">
+        <h3 style="margin-top:0">Post-Purchase Outlook</h3>
+        <div id="pnlDetails"></div>
+    </div>
+</div>
+
+<script>
+    function addRow() {
+        const tbody = document.getElementById('tableBody');
+        const row = document.createElement('tr');
+        row.innerHTML = `<td><input type="number" class="qty"></td><td><input type="number" class="rate"></td><td><input type="text" class="lineTotal" readonly style="border:none; background:transparent; font-weight:bold;"></td><td><button class="btn del-btn" onclick="removeRow(this)">Delete</button></td>`;
+        tbody.appendChild(row);
+    }
+
+    function removeRow(btn) { btn.parentElement.parentElement.remove(); updatePortfolioDisplay(); }
+
+    function updatePortfolioDisplay() {
+        const rows = document.querySelectorAll('#tableBody tr');
+        let totalGrams = 0, totalCost = 0;
+        rows.forEach(row => {
+            const qty = parseFloat(row.querySelector('.qty').value) || 0;
+            const rate = parseFloat(row.querySelector('.rate').value) || 0;
+            const lineValue = (qty / 10) * rate;
+            row.querySelector('.lineTotal').value = "₹" + lineValue.toLocaleString('en-IN');
+            totalGrams += qty; totalCost += lineValue;
+        });
+        const currentAvg = totalGrams > 0 ? (totalCost / (totalGrams / 10)) : 0;
+        document.getElementById('totalWeight').innerText = totalGrams + " g";
+        document.getElementById('totalInvestment').innerText = "₹" + totalCost.toLocaleString('en-IN');
+        document.getElementById('weightedAvg').innerText = "₹" + Math.round(currentAvg).toLocaleString('en-IN');
+        return { totalGrams, totalCost, currentAvg };
+    }
+
+    function executePlan() {
+        const { totalGrams, totalCost, currentAvg } = updatePortfolioDisplay();
+        const pToday = parseFloat(document.getElementById('todayRate').value);
+        const target = parseFloat(document.getElementById('targetAvg').value);
+        const planDiv = document.getElementById('planResult');
+        const pnlDiv = document.getElementById('pnlSection');
+
+        if (pToday && target && target < currentAvg && target > pToday) {
+            const q1 = totalGrams / 10;
+            let x = (q1 * (target - currentAvg)) / (pToday - target); // Lots to buy
+
+            if (x > 0) {
+                // Plan Display
+                planDiv.style.display = "block";
+                document.getElementById('unitBreakdown').innerHTML = `
+                    • Buy <b>${x.toFixed(2)} Thulas</b> (10g lots)<br>
+                    • Equals <b>${(x / 10).toFixed(2)} Biscuits</b> (100g blocks)
+                `;
+
+                // P&L Outlook Logic
+                pnlDiv.style.display = "block";
+                const totalNewWeight = (q1 + x) * 10;
+                const totalNewInvestment = totalCost + (x * pToday);
+                const marketValueOfTotal = (totalNewWeight / 10) * pToday;
+                const diff = marketValueOfTotal - totalNewInvestment;
+
+                pnlDiv.className = diff >= 0 ? "box profit" : "box loss";
+                document.getElementById('pnlDetails').innerHTML = `
+                    If you buy today at ₹${pToday.toLocaleString('en-IN')}:<br>
+                    • New Total Weight: <b>${totalNewWeight.toFixed(0)} g</b><br>
+                    • Total Spent: <b>₹${totalNewInvestment.toLocaleString('en-IN')}</b><br>
+                    • Market Value Now: <b>₹${marketValueOfTotal.toLocaleString('en-IN')}</b><br>
+                    • Current Standing: <b>${diff >= 0 ? 'PROFIT' : 'LOSS'} of ₹${Math.abs(diff).toLocaleString('en-IN')}</b>
+                `;
+            }
+        } else {
+            planDiv.style.display = "none";
+            pnlDiv.style.display = "none";
+        }
+    }
+    updatePortfolioDisplay();
+</script>
+</body>
+</html>
