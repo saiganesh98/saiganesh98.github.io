@@ -27,7 +27,7 @@
         .val { font-weight: bold; color: #b8860b; float: right; font-size: 1.1em; }
         .item { margin-bottom: 15px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px; }
         
-        #planResult { margin-top: 20px; padding: 20px; border-radius: 10px; display: none; border-left: 5px solid #27ae60; background: #ebfaef; }
+        #planResult { margin-top: 20px; padding: 25px; border-radius: 10px; display: none; border-left: 6px solid #27ae60; background: #f0fff4; color: #1b4332; }
         #pnlSection { margin-top: 20px; padding: 20px; border-radius: 10px; display: none; border: 1px solid #ddd; }
         .profit { background: #e6ffed; border-color: #28a745; color: #155724; }
         .loss { background: #fff5f5; border-color: #f5c6cb; color: #721c24; }
@@ -78,8 +78,8 @@
     </div>
 
     <div id="planResult">
-        <strong style="color: #1e8449; font-size: 1.2em;">Strategic Buy Plan:</strong>
-        <div id="unitBreakdown" style="font-size: 1.1em; margin-top:10px;"></div>
+        <h3 style="margin-top: 0; color: #1e8449;">Strategic Buy Plan:</h3>
+        <div id="unitBreakdown" style="font-size: 1.15em;"></div>
     </div>
 
     <div id="pnlSection">
@@ -125,19 +125,22 @@
         if (pToday && target && target < currentAvg && target > pToday) {
             const q1 = totalGrams / 10;
             let x = (q1 * (target - currentAvg)) / (pToday - target); // Lots to buy
+            let addInvestment = x * pToday;
 
             if (x > 0) {
-                // Plan Display
+                // Strategic Buy Plan Display
                 planDiv.style.display = "block";
                 document.getElementById('unitBreakdown').innerHTML = `
-                    • Buy <b>${x.toFixed(2)} Thulas</b> (10g lots)<br>
-                    • Equals <b>${(x / 10).toFixed(2)} Biscuits</b> (100g blocks)
+                    To reach your target of <b>₹${target.toLocaleString('en-IN')}</b>:<br><br>
+                    • You need to buy <b>${x.toFixed(2)} Thulas</b> (10g lots).<br>
+                    • This equals exactly <b>${(x / 10).toFixed(2)} Biscuits</b> (100g blocks).<br><br>
+                    <strong>Additional Investment: ₹${addInvestment.toLocaleString('en-IN', {minimumFractionDigits: 2})}</strong>
                 `;
 
                 // P&L Outlook Logic
                 pnlDiv.style.display = "block";
                 const totalNewWeight = (q1 + x) * 10;
-                const totalNewInvestment = totalCost + (x * pToday);
+                const totalNewInvestment = totalCost + addInvestment;
                 const marketValueOfTotal = (totalNewWeight / 10) * pToday;
                 const diff = marketValueOfTotal - totalNewInvestment;
 
