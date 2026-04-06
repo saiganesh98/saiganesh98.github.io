@@ -1,0 +1,45 @@
+06-04-2026:
+
+On Azure Virtual Machine:
+
+
+Install Following Softwares/Libraries
+
+Python and pip
+  (Setup Path as well)
+  Python C:\Users\saiganesh\AppData\Local\Programs\Python\
+  Pip C:\Users\saiganesh\AppData\Local\Programs\Python\Python314\Scripts
+  Change the pip.ini to artifactory in home folder and install pytest using command 'pip install pytest'
+  Install uv using 'pip install uv'
+VScode  
+Git
+Docker For windows (amd64)
+wsl --update
+
+Workflow:
+
+Section 1:
+1/ Head to reportportal website installation page : https://reportportal.io/installation/
+2/ Using docker method
+  a/ Firstly pull docker compose file using curl command given in documenation 
+  b/ Start the services using docker compose command. This will pull the images and as well as start the services
+3/ Open http://localhost:8080/ui and login with admin user(credentials provided in documentation)
+4/ Create a project -> navigate to adminstrate section and create a new project
+5/ Create a new API key by navigating to profile -> API  -> Generate New API Token
+
+Section 2:
+1/ Clone or create new uv +pytest bdd + playwright + python project and open project in vscode
+2/ change credentials in uv.toml
+3/ perform uv sync
+4/ add pytest-reportportal and add mandatory fields
+	rp_endpoint
+	rp_project
+	rp_launch
+	rp_api_key
+
+in pytest.ini file
+5/ uv sync and run the tests using command `uv run pytest --tags=web --headless --reportportal`
+6/ See the launch execution in the reportportal localhost:8080 service
+
+There is one issue with pytest-bdd, Two entries(step definition and scenario) are shown for one test(scenario). This is an outstanding issue currently.
+
