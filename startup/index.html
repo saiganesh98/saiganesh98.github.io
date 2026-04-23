@@ -5,95 +5,249 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Startup Management Portal</title>
     <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
         :root {
-            --primary: #2e7d32; /* Agricultural Green */
-            --secondary: #1565c0; /* Professional Blue */
-            --bg: #f4f7f6;
-            --text: #333;
+            --grad-bg:   linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --grad-card: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+            --accent:    #f093fb;
+            --accent2:   #38f9d7;
+            --text:      #e8e8f8;
+            --muted:     #9898bc;
+            --border:    rgba(255,255,255,0.12);
+            --shadow:    0 8px 32px rgba(0,0,0,0.45);
+            --radius:    18px;
         }
 
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            margin: 0;
+            min-height: 100vh;
+            background: var(--grad-bg);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: var(--text);
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
+            padding: 50px 20px 80px;
+            overflow-x: hidden;
         }
 
-        h1 { color: var(--primary); margin-bottom: 30px; }
+        /* Floating Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.18;
+            pointer-events: none;
+            animation: floatOrb 12s ease-in-out infinite alternate;
+        }
+        .orb-1 { width: 420px; height: 420px; background: #f093fb; top: -100px; left: -120px; animation-duration: 14s; }
+        .orb-2 { width: 360px; height: 360px; background: #38f9d7; bottom: -80px; right: -100px; animation-duration: 10s; animation-delay: -4s; }
+        .orb-3 { width: 280px; height: 280px; background: #f5576c; top: 40%; left: 50%; animation-duration: 16s; animation-delay: -8s; }
 
+        @keyframes floatOrb {
+            from { transform: translateY(0) scale(1); }
+            to   { transform: translateY(40px) scale(1.08); }
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeDown 0.7s ease both;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 18px;
+            background: rgba(240,147,251,0.12);
+            border: 1px solid rgba(240,147,251,0.35);
+            border-radius: 100px;
+            font-size: 0.72rem;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: #f093fb;
+            margin-bottom: 16px;
+        }
+        header h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 800;
+            background: linear-gradient(90deg, #f093fb, #38f9d7, #f5576c);
+            background-size: 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 4s linear infinite;
+        }
+        header p {
+            margin-top: 10px;
+            color: #9898bc;
+            font-size: 0.95rem;
+        }
+
+        @keyframes shimmer {
+            0%   { background-position: 0%; }
+            100% { background-position: 200%; }
+        }
+
+        /* Grid */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
             width: 100%;
-            max-width: 1000px;
+            max-width: 1050px;
         }
 
+        /* Card */
         .card {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
+            position: relative;
+            background: var(--grad-card);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px 26px 28px;
             text-align: center;
             text-decoration: none;
             color: var(--text);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-            border-top: 5px solid var(--primary);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.25s;
+            animation: fadeUp 0.6s ease both;
         }
-
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.55);
         }
 
-        .card h3 { margin: 10px 0; font-size: 1.25rem; }
-        
-        /* Specific accent colors for different categories */
-        .market { border-top-color: #f57c00; }
-        .ikp { border-top-color: #7b1fa2; }
-        .tractor { border-top-color: #d32f2f; }
-        .miller { border-top-color: #00796b; } /* Teal accent for Rice Miller */
+        /* Glowing top bar per category */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            border-radius: var(--radius) var(--radius) 0 0;
+            background: var(--card-accent, linear-gradient(90deg, #f093fb, #f5576c));
+        }
 
+        /* Shimmer sweep on hover */
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.05) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+            pointer-events: none;
+        }
+        .card:hover::after { transform: translateX(100%); }
+
+        .card-icon {
+            font-size: 2.4rem;
+            margin-bottom: 14px;
+            display: block;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
+            transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+        }
+        .card:hover .card-icon { transform: scale(1.2) rotate(-5deg); }
+
+        .card h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #e8e8f8;
+        }
+        .card p {
+            font-size: 0.83rem;
+            color: #9898bc;
+            line-height: 1.55;
+        }
+
+        /* Category Accent Colors */
+        .farmer  { --card-accent: linear-gradient(90deg, #43e97b, #38f9d7); }
+        .market  { --card-accent: linear-gradient(90deg, #f6d365, #fda085); }
+        .trader  { --card-accent: linear-gradient(90deg, #4facfe, #00f2fe); }
+        .ikp     { --card-accent: linear-gradient(90deg, #a18cd1, #fbc2eb); }
+        .miller  { --card-accent: linear-gradient(90deg, #0fd850, #f9f047); }
+        .tractor { --card-accent: linear-gradient(90deg, #f5576c, #f093fb); }
+        .rate    { --card-accent: linear-gradient(90deg, #f093fb, #38f9d7); }
+
+        /* Staggered Entry */
+        .card:nth-child(1) { animation-delay: 0.05s; }
+        .card:nth-child(2) { animation-delay: 0.12s; }
+        .card:nth-child(3) { animation-delay: 0.19s; }
+        .card:nth-child(4) { animation-delay: 0.26s; }
+        .card:nth-child(5) { animation-delay: 0.33s; }
+        .card:nth-child(6) { animation-delay: 0.40s; }
+        .card:nth-child(7) { animation-delay: 0.47s; }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
-    <h1>Startup Resource Portal</h1>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <header>
+        <div class="badge">Agricultural Management Suite</div>
+        <h1>Startup Resource Portal</h1>
+        <p>Your central hub for all operations &amp; management tools</p>
+    </header>
 
     <div class="grid">
-        <a href="https://saiganesh98.github.io/startup/farmer/" class="card" target="_blank">
+        <a href="https://saiganesh98.github.io/startup/farmer/" class="card farmer" target="_blank">
+            <span class="card-icon">&#127806;</span>
             <h3>Farmer Portal</h3>
             <p>Access agricultural resources and management tools.</p>
         </a>
 
         <a href="https://saiganesh98.github.io/startup/market-expense/" class="card market" target="_blank">
-            <h3>Market & Expense</h3>
+            <span class="card-icon">&#128202;</span>
+            <h3>Market &amp; Expense</h3>
             <p>Track pricing, market trends, and daily expenses.</p>
         </a>
 
-        <a href="https://saiganesh98.github.io/startup/trader/" class="card" target="_blank">
+        <a href="https://saiganesh98.github.io/startup/trader/" class="card trader" target="_blank">
+            <span class="card-icon">&#128230;</span>
             <h3>Trader Portal</h3>
             <p>Trade management and inventory tracking for buyers.</p>
         </a>
 
         <a href="https://saiganesh98.github.io/startup/ikp/" class="card ikp" target="_blank">
+            <span class="card-icon">&#127974;</span>
             <h3>IKP Portal</h3>
             <p>Incentive and procurement program management.</p>
         </a>
 
         <a href="https://saiganesh98.github.io/startup/ricemiller/" class="card miller" target="_blank">
+            <span class="card-icon">&#9881;&#65039;</span>
             <h3>Rice Miller</h3>
             <p>Milling operations, stock processing, and delivery tracking.</p>
         </a>
 
         <a href="https://saiganesh98.github.io/startup/tractor/" class="card tractor" target="_blank">
+            <span class="card-icon">&#128668;</span>
             <h3>Tractor Services</h3>
             <p>Machinery booking and maintenance schedules.</p>
         </a>
+
         <a href="https://saiganesh98.github.io/startup/ratecalculator/" class="card rate" target="_blank">
+            <span class="card-icon">&#129518;</span>
             <h3>Rate Calculator</h3>
             <p>Calculate rates and pricing for agricultural products.</p>
         </a>
