@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>File Download Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f4f8;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 24px;
+    }
+    #download-btn {
+      padding: 14px 32px;
+      font-size: 16px;
+      background-color: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    #download-btn:hover {
+      background-color: #1d4ed8;
+    }
+    #status {
+      margin-top: 16px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Browser Download Preference Tester</h1>
+  <button id="download-btn" onclick="downloadFile()">Download sample.txt</button>
+  <p id="status"></p>
+
+  <script>
+    function downloadFile() {
+      const content = [
+        'Browser Download Preference Test File',
+        '======================================',
+        '',
+        'This file was downloaded to verify chromePrefs / firefoxPrefs / edgePrefs',
+        'are correctly setting the default download directory.',
+        '',
+        'Timestamp : ' + new Date().toISOString(),
+        'User-Agent: ' + navigator.userAgent,
+      ].join('\n');
+
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url  = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href     = url;
+      link.download = 'sample.txt';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      document.getElementById('status').textContent = 'Download triggered!';
+    }
+  </script>
+</body>
+</html>
