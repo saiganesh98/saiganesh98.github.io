@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playwright CLI — Form &amp; Locator Test Page</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; color: #1a1a1a; padding: 20px 32px; }
+    h1 { text-align: center; margin-bottom: 8px; color: #0d47a1; }
+    .subtitle { text-align: center; color: #666; margin-bottom: 28px; font-size: 14px; }
+    h2 { margin: 16px 0 10px; color: #1565c0; border-left: 4px solid #1565c0; padding-left: 10px; }
+    section { background: #fff; border-radius: 8px; padding: 18px 22px; margin-bottom: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    label { display: block; margin: 6px 0 3px; font-weight: 600; font-size: 14px; }
+    .inline-label { display: inline-flex; align-items: center; gap: 5px; margin-right: 14px; font-weight: 400; cursor: pointer; }
+    input[type="text"], input[type="password"], input[type="email"], input[type="number"],
+    input[type="tel"], input[type="search"], input[type="url"], input[type="date"],
+    input[type="time"], input[type="datetime-local"], textarea {
+      border: 1px solid #bbb; border-radius: 4px; padding: 7px 10px; width: 280px; font-size: 14px; margin-bottom: 6px;
+    }
+    textarea { height: 64px; resize: vertical; }
+    select { border: 1px solid #bbb; border-radius: 4px; padding: 7px 10px; font-size: 14px; min-width: 200px; }
+    button, input[type="submit"], input[type="reset"] {
+      padding: 8px 22px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin: 4px 6px 4px 0;
+    }
+    .btn-primary { background: #1565c0; color: #fff; }
+    .btn-primary:hover { background: #0d47a1; }
+    .btn-secondary { background: #e0e0e0; color: #333; }
+    .btn-danger { background: #c62828; color: #fff; }
+    .btn-success { background: #2e7d32; color: #fff; }
+    .row { display: flex; gap: 20px; flex-wrap: wrap; }
+    .col { flex: 1; min-width: 250px; }
+    .form-group { margin-bottom: 12px; }
+    .result-box { background: #e3f2fd; border: 1px solid #90caf9; border-radius: 4px; padding: 10px; margin-top: 10px; min-height: 28px; font-size: 14px; }
+    .checkbox-grid, .radio-grid { display: flex; flex-wrap: wrap; gap: 4px 0; }
+    iframe { border: 2px solid #1565c0; border-radius: 4px; margin-top: 6px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 8px; }
+    th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; font-size: 14px; }
+    th { background: #e3f2fd; }
+    .tag { display: inline-block; background: #e8eaf6; padding: 2px 8px; border-radius: 12px; font-size: 12px; color: #3949ab; margin: 2px; }
+    hr { border: none; border-top: 1px solid #e0e0e0; margin: 14px 0; }
+    .file-upload-area { border: 2px dashed #90caf9; border-radius: 6px; padding: 20px; text-align: center; margin-top: 6px; }
+  </style>
+</head>
+<body>
+
+<h1 id="page-title">Playwright CLI — Form &amp; Locator Test Page</h1>
+<p class="subtitle">Use this page to test <code>npx playwright generate-locator</code>, <code>evaluate</code>, and selector strategies.</p>
+
+<!-- ================================================================ -->
+<!-- SECTION 1: TEXT INPUTS (various types & selector strategies)     -->
+<!-- ================================================================ -->
+<section id="section-inputs">
+  <h2>Text &amp; Input Fields</h2>
+  <div class="row">
+    <div class="col">
+      <div class="form-group">
+        <label for="first-name">First Name</label>
+        <input type="text" id="first-name" name="firstName" placeholder="Enter first name" data-testid="input-first-name" aria-label="First name">
+      </div>
+      <div class="form-group">
+        <label for="last-name">Last Name</label>
+        <input type="text" id="last-name" name="lastName" placeholder="Enter last name" data-testid="input-last-name" aria-label="Last name">
+      </div>
+      <div class="form-group">
+        <label for="email-field">Email Address</label>
+        <input type="email" id="email-field" name="email" placeholder="you@example.com" data-testid="input-email" aria-label="Email address">
+      </div>
+      <div class="form-group">
+        <label for="password-field">Password</label>
+        <input type="password" id="password-field" name="password" placeholder="Enter password" data-testid="input-password" aria-label="Password">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <label for="phone-field">Phone Number</label>
+        <input type="tel" id="phone-field" name="phone" placeholder="+1-555-000-0000" data-testid="input-phone" aria-label="Phone number">
+      </div>
+      <div class="form-group">
+        <label for="age-field">Age</label>
+        <input type="number" id="age-field" name="age" min="1" max="150" placeholder="25" data-testid="input-age" aria-label="Age">
+      </div>
+      <div class="form-group">
+        <label for="search-field">Search</label>
+        <input type="search" id="search-field" name="search" placeholder="Search anything…" data-testid="input-search" aria-label="Search" role="searchbox">
+      </div>
+      <div class="form-group">
+        <label for="website-field">Website URL</label>
+        <input type="url" id="website-field" name="website" placeholder="https://example.com" data-testid="input-url" aria-label="Website URL">
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col">
+      <div class="form-group">
+        <label for="date-field">Date</label>
+        <input type="date" id="date-field" name="date" data-testid="input-date" aria-label="Date">
+      </div>
+      <div class="form-group">
+        <label for="time-field">Time</label>
+        <input type="time" id="time-field" name="time" data-testid="input-time" aria-label="Time">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <label for="datetime-field">Date &amp; Time</label>
+        <input type="datetime-local" id="datetime-field" name="datetime" data-testid="input-datetime" aria-label="Date and time">
+      </div>
+      <div class="form-group">
+        <label for="color-field">Favorite Color</label>
+        <input type="color" id="color-field" name="color" value="#1565c0" data-testid="input-color" aria-label="Favorite color">
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="form-group">
+    <label for="message-area">Message (Textarea)</label>
+    <textarea id="message-area" name="message" placeholder="Type your message here…" data-testid="input-message" aria-label="Message"></textarea>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- SECTION 2: CHECKBOXES                                           -->
+<!-- ================================================================ -->
+<section id="section-checkboxes">
+  <h2>Checkboxes</h2>
+
+  <p style="margin-bottom:8px; font-size:13px; color:#555;">Select your preferred programming languages:</p>
+  <div class="checkbox-grid" data-testid="checkbox-group-languages">
+    <label class="inline-label"><input type="checkbox" id="cb-java" name="language" value="java"> Java</label>
+    <label class="inline-label"><input type="checkbox" id="cb-python" name="language" value="python"> Python</label>
+    <label class="inline-label"><input type="checkbox" id="cb-javascript" name="language" value="javascript"> JavaScript</label>
+    <label class="inline-label"><input type="checkbox" id="cb-typescript" name="language" value="typescript"> TypeScript</label>
+    <label class="inline-label"><input type="checkbox" id="cb-csharp" name="language" value="csharp"> C#</label>
+    <label class="inline-label"><input type="checkbox" id="cb-go" name="language" value="go"> Go</label>
+    <label class="inline-label"><input type="checkbox" id="cb-rust" name="language" value="rust"> Rust</label>
+  </div>
+
+  <hr>
+  <p style="margin-bottom:8px; font-size:13px; color:#555;">Notification preferences:</p>
+  <div class="checkbox-grid" data-testid="checkbox-group-notifications">
+    <label class="inline-label"><input type="checkbox" id="cb-email-notif" name="notification" value="email" checked> Email notifications</label>
+    <label class="inline-label"><input type="checkbox" id="cb-sms-notif" name="notification" value="sms"> SMS notifications</label>
+    <label class="inline-label"><input type="checkbox" id="cb-push-notif" name="notification" value="push"> Push notifications</label>
+  </div>
+
+  <hr>
+  <div class="form-group">
+    <label class="inline-label"><input type="checkbox" id="cb-terms" name="terms" value="agree" data-testid="cb-terms"> I agree to the <a href="#" onclick="event.preventDefault()">Terms &amp; Conditions</a></label>
+  </div>
+  <div class="form-group">
+    <label class="inline-label"><input type="checkbox" name="newsletter" value="yes" data-testid="cb-newsletter"> Subscribe to newsletter</label>
+  </div>
+  <!-- No id, no data-testid — forces CSS/XPath fallback -->
+  <div class="form-group">
+    <label class="inline-label"><input type="checkbox" name="anonymous-cb" value="yes" class="anonymous-checkbox"> Anonymous checkbox (no id or test-id)</label>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- SECTION 3: RADIO BUTTONS                                        -->
+<!-- ================================================================ -->
+<section id="section-radio-buttons">
+  <h2>Radio Buttons</h2>
+
+  <p style="margin-bottom:8px; font-size:13px; color:#555;">Gender:</p>
+  <div class="radio-grid" data-testid="radio-group-gender">
+    <label class="inline-label"><input type="radio" id="radio-male" name="gender" value="male"> Male</label>
+    <label class="inline-label"><input type="radio" id="radio-female" name="gender" value="female"> Female</label>
+    <label class="inline-label"><input type="radio" id="radio-nonbinary" name="gender" value="nonbinary"> Non-binary</label>
+    <label class="inline-label"><input type="radio" id="radio-prefer-not" name="gender" value="prefer-not"> Prefer not to say</label>
+  </div>
+
+  <hr>
+  <p style="margin-bottom:8px; font-size:13px; color:#555;">Experience level:</p>
+  <div class="radio-grid" data-testid="radio-group-experience">
+    <label class="inline-label"><input type="radio" name="experience" value="junior"> Junior (0-2 years)</label>
+    <label class="inline-label"><input type="radio" name="experience" value="mid"> Mid-Level (2-5 years)</label>
+    <label class="inline-label"><input type="radio" name="experience" value="senior"> Senior (5-10 years)</label>
+    <label class="inline-label"><input type="radio" name="experience" value="lead"> Lead (10+ years)</label>
+  </div>
+
+  <hr>
+  <p style="margin-bottom:8px; font-size:13px; color:#555;">Preferred contact method:</p>
+  <div class="radio-grid" data-testid="radio-group-contact">
+    <label class="inline-label"><input type="radio" name="contact" value="email" checked> Email</label>
+    <label class="inline-label"><input type="radio" name="contact" value="phone"> Phone</label>
+    <label class="inline-label"><input type="radio" name="contact" value="sms"> SMS</label>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- SECTION 4: DROPDOWNS                                            -->
+<!-- ================================================================ -->
+<section id="section-dropdowns">
+  <h2>Dropdowns (Select)</h2>
+  <div class="row">
+    <div class="col">
+      <div class="form-group">
+        <label for="country-select">Country</label>
+        <select id="country-select" name="country" data-testid="select-country" aria-label="Country">
+          <option value="">-- Select Country --</option>
+          <option value="us">United States</option>
+          <option value="in">India</option>
+          <option value="uk">United Kingdom</option>
+          <option value="de">Germany</option>
+          <option value="jp">Japan</option>
+          <option value="au">Australia</option>
+          <option value="br">Brazil</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="role-select">Job Role</label>
+        <select id="role-select" name="role" data-testid="select-role" aria-label="Job Role">
+          <option value="">-- Select Role --</option>
+          <optgroup label="Engineering">
+            <option value="frontend">Frontend Developer</option>
+            <option value="backend">Backend Developer</option>
+            <option value="fullstack">Full Stack Developer</option>
+            <option value="devops">DevOps Engineer</option>
+          </optgroup>
+          <optgroup label="QA">
+            <option value="qa-manual">Manual QA</option>
+            <option value="qa-auto">Automation Engineer</option>
+            <option value="sdet">SDET</option>
+          </optgroup>
+          <optgroup label="Management">
+            <option value="pm">Product Manager</option>
+            <option value="em">Engineering Manager</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <label for="skills-select">Skills (Multi-select)</label>
+        <select id="skills-select" name="skills" multiple size="5" data-testid="select-skills" aria-label="Skills">
+          <option value="selenium">Selenium</option>
+          <option value="playwright">Playwright</option>
+          <option value="cypress">Cypress</option>
+          <option value="appium">Appium</option>
+          <option value="rest-assured">REST Assured</option>
+          <option value="postman">Postman</option>
+          <option value="jmeter">JMeter</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- SECTION 5: RANGE SLIDER & FILE UPLOAD                           -->
+<!-- ================================================================ -->
+<section id="section-special-inputs">
+  <h2>Special Inputs</h2>
+  <div class="row">
+    <div class="col">
+      <div class="form-group">
+        <label for="range-slider">Satisfaction (0-100): <span id="range-value">50</span></label>
+        <input type="range" id="range-slider" name="satisfaction" min="0" max="100" value="50" data-testid="input-range"
+               aria-label="Satisfaction" style="width:280px;"
+               oninput="document.getElementById('range-value').textContent=this.value">
+      </div>
+      <div class="form-group">
+        <label for="file-upload">Upload Resume</label>
+        <input type="file" id="file-upload" name="resume" accept=".pdf,.doc,.docx" data-testid="input-file" aria-label="Upload resume">
+      </div>
+      <div class="form-group">
+        <label for="multi-file-upload">Upload Screenshots (multiple)</label>
+        <input type="file" id="multi-file-upload" name="screenshots" multiple accept="image/*" data-testid="input-file-multi" aria-label="Upload screenshots">
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group file-upload-area" id="drag-drop-area" data-testid="drag-drop-area">
+        <p>Drag &amp; drop files here</p>
+        <p style="font-size:12px; color:#999;">or click to browse</p>
+        <input type="file" id="drag-drop-input" style="display:none;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- SECTION 6: BUTTONS & SUBMIT                                     -->
+<!-- ================================================================ -->
+<section id="section-buttons">
+  <h2>Buttons &amp; Form Submit</h2>
+  <form id="main-form" name="mainForm" onsubmit="handleFormSubmit(event)">
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label for="submit-name">Full Name (for submit)</label>
+          <input type="text" id="submit-name" name="fullname" placeholder="John Doe" data-testid="submit-name" aria-label="Full name for submission">
+        </div>
+        <div class="form-group">
+          <label for="submit-email">Email (for submit)</label>
+          <input type="email" id="submit-email" name="submitemail" placeholder="john@example.com" data-testid="submit-email">
+        </div>
+      </div>
+      <div class="col" style="display:flex; flex-direction:column; justify-content:flex-end; gap:8px; padding-bottom:12px;">
+        <div>
+          <input type="submit" id="btn-submit" value="Submit Form" class="btn-primary" data-testid="btn-submit">
+          <input type="reset" id="btn-reset" value="Reset" class="btn-secondary" data-testid="btn-reset">
+        </div>
+        <div>
+          <button type="button" id="btn-click-me" class="btn-primary" data-testid="btn-click-me" onclick="handleClick()">Click Me</button>
+          <button type="button" id="btn-save" class="btn-success" data-testid="btn-save" onclick="handleSave()">Save Draft</button>
+          <button type="button" id="btn-cancel" class="btn-secondary" data-testid="btn-cancel" onclick="handleCancel()">Cancel</button>
+          <button type="button" id="btn-delete" class="btn-danger" data-testid="btn-delete" onclick="handleDelete()">Delete</button>
+        </div>
+        <!-- Buttons without id — forces alternative locator strategies -->
+        <div>
+          <button type="button" class="btn-primary action-btn" data-action="approve">Approve</button>
+          <button type="button" class="btn-danger action-btn" data-action="reject">Reject</button>
+          <button type="button" class="btn-secondary action-btn" data-action="hold">Put on Hold</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div id="form-result" class="result-box" data-testid="form-result" role="status" aria-live="polite">Waiting for action…</div>
+</section>
+
+<!-- ================================================================ -->
+<!-- SECTION 7: ELEMENTS WITHOUT IDs (locator challenge)             -->
+<!-- ================================================================ -->
+<section id="section-no-ids">
+  <h2>Elements Without IDs</h2>
+  <p style="font-size:13px; color:#555; margin-bottom:10px;">These elements have no <code>id</code> — the locator generator must use text, CSS, XPath, or ARIA strategies.</p>
+
+  <div class="form-group">
+    <label>City</label>
+    <input type="text" name="city" placeholder="City" class="no-id-input" aria-label="City">
+  </div>
+  <div class="form-group">
+    <label>ZIP Code</label>
+    <input type="text" name="zipcode" placeholder="ZIP Code" class="no-id-input" aria-label="ZIP Code">
+  </div>
+  <div class="form-group">
+    <span class="info-text" data-role="hint">This is a hint message with no id</span>
+  </div>
+  <div class="form-group">
+    <p>A plain paragraph element for text-based locators.</p>
+    <strong>Bold text for testing strong element locators.</strong>
+  </div>
+  <div class="form-group">
+    <a href="#" onclick="event.preventDefault(); document.getElementById('form-result').textContent='Link clicked!'" role="link">Click this link</a>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- SECTION 8: TABLE WITH ACTIONS                                   -->
+<!-- ================================================================ -->
+<section id="section-table">
+  <h2>Data Table</h2>
+  <table id="employee-table" data-testid="employee-table" aria-label="Employee list">
+    <thead>
+      <tr>
+        <th>Select</th>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr data-row="1">
+        <td><input type="checkbox" name="select-row" value="1" aria-label="Select Alice"></td>
+        <td>Alice Johnson</td>
+        <td>QA Engineer</td>
+        <td>alice@example.com</td>
+        <td><span class="tag">Active</span></td>
+        <td>
+          <button type="button" class="btn-primary" style="padding:4px 10px; font-size:12px;" data-action="edit" data-row="1">Edit</button>
+          <button type="button" class="btn-danger" style="padding:4px 10px; font-size:12px;" data-action="delete" data-row="1">Delete</button>
+        </td>
+      </tr>
+      <tr data-row="2">
+        <td><input type="checkbox" name="select-row" value="2" aria-label="Select Bob"></td>
+        <td>Bob Smith</td>
+        <td>Developer</td>
+        <td>bob@example.com</td>
+        <td><span class="tag">Active</span></td>
+        <td>
+          <button type="button" class="btn-primary" style="padding:4px 10px; font-size:12px;" data-action="edit" data-row="2">Edit</button>
+          <button type="button" class="btn-danger" style="padding:4px 10px; font-size:12px;" data-action="delete" data-row="2">Delete</button>
+        </td>
+      </tr>
+      <tr data-row="3">
+        <td><input type="checkbox" name="select-row" value="3" aria-label="Select Carol"></td>
+        <td>Carol Davis</td>
+        <td>DevOps</td>
+        <td>carol@example.com</td>
+        <td><span class="tag">Inactive</span></td>
+        <td>
+          <button type="button" class="btn-primary" style="padding:4px 10px; font-size:12px;" data-action="edit" data-row="3">Edit</button>
+          <button type="button" class="btn-danger" style="padding:4px 10px; font-size:12px;" data-action="delete" data-row="3">Delete</button>
+        </td>
+      </tr>
+      <tr data-row="4">
+        <td><input type="checkbox" name="select-row" value="4" aria-label="Select Dave"></td>
+        <td>Dave Wilson</td>
+        <td>SDET</td>
+        <td>dave@example.com</td>
+        <td><span class="tag">Active</span></td>
+        <td>
+          <button type="button" class="btn-primary" style="padding:4px 10px; font-size:12px;" data-action="edit" data-row="4">Edit</button>
+          <button type="button" class="btn-danger" style="padding:4px 10px; font-size:12px;" data-action="delete" data-row="4">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ================================================================ -->
+<!-- SECTION 9: IFRAMES                                              -->
+<!-- ================================================================ -->
+<section id="section-iframes">
+  <h2>Iframes</h2>
+
+  <h3 style="margin:8px 0 6px; font-size:15px;">Frame 1 — Registration Form</h3>
+  <iframe id="frame-register" name="registerFrame" title="Registration Frame" width="100%" height="260" data-testid="frame-register" srcdoc="
+    <!DOCTYPE html>
+    <html><head><style>
+      body { font-family: 'Segoe UI', sans-serif; padding: 14px; background: #fef9e7; }
+      label { display: block; margin: 5px 0 2px; font-weight: 600; font-size: 13px; }
+      input, select { padding: 6px 8px; width: 240px; margin-bottom: 6px; border: 1px solid #ccc; border-radius: 3px; font-size: 13px; }
+      button { padding: 7px 18px; background: #e67e22; color: #fff; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; }
+    </style></head><body>
+      <h3 id='frame-title'>Registration (Inside Frame)</h3>
+      <form id='frame-reg-form' name='frameRegForm'>
+        <label for='frame-name'>Full Name</label>
+        <input type='text' id='frame-name' name='name' placeholder='Your name' data-testid='frame-input-name' aria-label='Full name'>
+        <label for='frame-email'>Email</label>
+        <input type='email' id='frame-email' name='email' placeholder='Your email' data-testid='frame-input-email' aria-label='Email'>
+        <label for='frame-role'>Role</label>
+        <select id='frame-role' name='role' data-testid='frame-select-role' aria-label='Role'>
+          <option value=''>-- Select --</option>
+          <option value='dev'>Developer</option>
+          <option value='qa'>QA Engineer</option>
+          <option value='pm'>Project Manager</option>
+        </select>
+        <div style='margin-top:6px;'>
+          <label style='display:inline-flex; align-items:center; gap:4px; font-weight:400;'>
+            <input type='checkbox' id='frame-agree' name='agree' data-testid='frame-cb-agree'> I agree to terms
+          </label>
+        </div>
+        <div style='margin-top:8px;'>
+          <button type='submit' id='frame-submit' data-testid='frame-btn-submit' onclick='event.preventDefault(); document.getElementById(&apos;frame-result&apos;).textContent=&apos;Registered!&apos;'>Register</button>
+        </div>
+        <div id='frame-result' style='margin-top:6px; padding:6px; background:#fdebd0; border-radius:3px; min-height:20px;'></div>
+      </form>
+    </body></html>
+  "></iframe>
+
+  <h3 style="margin:16px 0 6px; font-size:15px;">Frame 2 — Controls (Checkboxes, Radios, Buttons)</h3>
+  <iframe id="frame-controls" name="controlsFrame" title="Controls Frame" width="100%" height="220" data-testid="frame-controls" srcdoc="
+    <!DOCTYPE html>
+    <html><head><style>
+      body { font-family: 'Segoe UI', sans-serif; padding: 14px; background: #eaf2f8; }
+      label { margin-right: 12px; font-size: 13px; }
+      button { padding: 6px 14px; background: #2980b9; color: #fff; border: none; border-radius: 3px; cursor: pointer; margin-top: 8px; font-size: 13px; }
+    </style></head><body>
+      <h3 id='frame-ctrl-title'>Controls (Inside Frame)</h3>
+      <div>
+        <strong>Permissions:</strong><br>
+        <label><input type='checkbox' id='frame-cb-read' name='perm' value='read'> Read</label>
+        <label><input type='checkbox' id='frame-cb-write' name='perm' value='write'> Write</label>
+        <label><input type='checkbox' id='frame-cb-exec' name='perm' value='execute'> Execute</label>
+        <label><input type='checkbox' id='frame-cb-admin' name='perm' value='admin'> Admin</label>
+      </div>
+      <div style='margin-top:10px;'>
+        <strong>Priority:</strong><br>
+        <label><input type='radio' name='priority' value='low'> Low</label>
+        <label><input type='radio' name='priority' value='medium' checked> Medium</label>
+        <label><input type='radio' name='priority' value='high'> High</label>
+        <label><input type='radio' name='priority' value='critical'> Critical</label>
+      </div>
+      <div style='margin-top:10px;'>
+        <button type='button' id='frame-btn-apply' data-testid='frame-btn-apply'>Apply Settings</button>
+        <button type='button' id='frame-btn-reset' data-testid='frame-btn-reset' style='background:#95a5a6;'>Reset</button>
+      </div>
+    </body></html>
+  "></iframe>
+
+  <h3 style="margin:16px 0 6px; font-size:15px;">Frame 3 — Nested Iframe</h3>
+  <iframe id="frame-outer" name="outerFrame" title="Outer Frame" width="100%" height="200" data-testid="frame-outer" srcdoc="
+    <!DOCTYPE html>
+    <html><head><style>body { font-family: sans-serif; padding: 10px; background: #fdf2e9; }</style></head><body>
+      <h4 id='outer-title'>Outer Frame</h4>
+      <input type='text' id='outer-input' placeholder='Outer frame input' data-testid='outer-input' style='padding:5px 8px; border:1px solid #ccc; border-radius:3px;'>
+      <iframe id='inner-frame' name='innerFrame' title='Inner Frame' width='95%' height='80' style='border:1px dashed #27ae60; margin-top:8px;' srcdoc=&quot;
+        <!DOCTYPE html>
+        <html><head><style>body { font-family: sans-serif; padding: 8px; background: #d5f5e3; }</style></head><body>
+          <span id='inner-text'>Inner nested frame content</span>
+          <input type='text' id='inner-input' placeholder='Inner frame input' data-testid='inner-input' style='padding:4px 6px; border:1px solid #aaa; border-radius:3px; margin-left:6px;'>
+          <button id='inner-btn' style='padding:4px 12px; background:#27ae60; color:#fff; border:none; border-radius:3px; cursor:pointer; margin-left:4px;'>Inner Btn</button>
+        </body></html>
+      &quot;></iframe>
+    </body></html>
+  "></iframe>
+</section>
+
+<!-- ================================================================ -->
+<!-- SECTION 10: DYNAMIC CONTENT                                     -->
+<!-- ================================================================ -->
+<section id="section-dynamic">
+  <h2>Dynamic Content</h2>
+  <div class="form-group">
+    <button type="button" id="btn-add-item" class="btn-primary" data-testid="btn-add-item" onclick="addDynamicItem()">Add Item</button>
+    <button type="button" id="btn-clear-items" class="btn-secondary" data-testid="btn-clear-items" onclick="clearDynamicItems()">Clear All</button>
+  </div>
+  <ul id="dynamic-list" data-testid="dynamic-list" style="list-style:none; padding:0; margin-top:8px;">
+    <!-- Items added dynamically by JS -->
+  </ul>
+
+  <hr>
+  <div class="form-group">
+    <button type="button" id="btn-toggle-panel" class="btn-primary" data-testid="btn-toggle-panel" onclick="togglePanel()">Show/Hide Panel</button>
+  </div>
+  <div id="toggleable-panel" data-testid="toggleable-panel" style="display:none; border:1px solid #90caf9; border-radius:4px; padding:12px; margin-top:8px; background:#e3f2fd;">
+    <p>This panel is toggled dynamically.</p>
+    <input type="text" id="panel-input" placeholder="Input inside panel" data-testid="panel-input" aria-label="Panel input">
+    <button type="button" class="btn-primary" style="margin-top:6px;" data-testid="panel-btn" onclick="document.getElementById('form-result').textContent='Panel button clicked!'">Panel Action</button>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- SECTION 11: DISABLED & READONLY                                 -->
+<!-- ================================================================ -->
+<section id="section-states">
+  <h2>Disabled &amp; Readonly States</h2>
+  <div class="row">
+    <div class="col">
+      <div class="form-group">
+        <label for="disabled-input">Disabled Input</label>
+        <input type="text" id="disabled-input" value="Cannot edit this" data-testid="disabled-input" aria-label="Disabled input" disabled>
+      </div>
+      <div class="form-group">
+        <label for="readonly-input">Readonly Input</label>
+        <input type="text" id="readonly-input" value="Read only value" data-testid="readonly-input" aria-label="Readonly input" readonly>
+      </div>
+    </div>
+    <div class="col">
+      <div class="form-group">
+        <label for="disabled-select">Disabled Select</label>
+        <select id="disabled-select" data-testid="disabled-select" disabled>
+          <option>Option A</option>
+          <option selected>Option B</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Disabled Checkbox</label>
+        <label class="inline-label"><input type="checkbox" checked disabled data-testid="disabled-checkbox"> Checked &amp; Disabled</label>
+      </div>
+      <div class="form-group">
+        <button type="button" class="btn-primary" disabled data-testid="disabled-button">Disabled Button</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- SECTION 12: ARIA ROLES & ACCESSIBILITY                          -->
+<!-- ================================================================ -->
+<section id="section-aria">
+  <h2>ARIA Roles &amp; Accessibility</h2>
+  <div role="alert" id="alert-box" data-testid="alert-box" style="background:#ffebee; border:1px solid #ef9a9a; border-radius:4px; padding:10px; margin-bottom:10px;">
+    This is an alert message.
+  </div>
+  <div role="navigation" aria-label="Breadcrumb" data-testid="breadcrumb" style="margin-bottom:10px;">
+    <a href="#" onclick="event.preventDefault()">Home</a> &gt;
+    <a href="#" onclick="event.preventDefault()">Forms</a> &gt;
+    <span aria-current="page">Test Page</span>
+  </div>
+  <div role="tablist" aria-label="Sample Tabs" data-testid="tab-list" style="display:flex; gap:0;">
+    <button role="tab" id="tab-1" aria-selected="true" aria-controls="tabpanel-1" data-testid="tab-1"
+            style="padding:8px 16px; border:1px solid #ccc; border-bottom:none; background:#fff; cursor:pointer; border-radius:4px 4px 0 0;"
+            onclick="switchTab(1)">Tab 1</button>
+    <button role="tab" id="tab-2" aria-selected="false" aria-controls="tabpanel-2" data-testid="tab-2"
+            style="padding:8px 16px; border:1px solid #ccc; border-bottom:none; background:#e0e0e0; cursor:pointer; border-radius:4px 4px 0 0;"
+            onclick="switchTab(2)">Tab 2</button>
+    <button role="tab" id="tab-3" aria-selected="false" aria-controls="tabpanel-3" data-testid="tab-3"
+            style="padding:8px 16px; border:1px solid #ccc; border-bottom:none; background:#e0e0e0; cursor:pointer; border-radius:4px 4px 0 0;"
+            onclick="switchTab(3)">Tab 3</button>
+  </div>
+  <div id="tabpanel-1" role="tabpanel" aria-labelledby="tab-1" data-testid="tabpanel-1" style="border:1px solid #ccc; padding:12px; border-radius:0 4px 4px 4px;">
+    Content for Tab 1. <input type="text" placeholder="Tab 1 input" data-testid="tab1-input" aria-label="Tab 1 input">
+  </div>
+  <div id="tabpanel-2" role="tabpanel" aria-labelledby="tab-2" data-testid="tabpanel-2" style="border:1px solid #ccc; padding:12px; border-radius:0 4px 4px 4px; display:none;">
+    Content for Tab 2. <button type="button" class="btn-primary" data-testid="tab2-btn">Tab 2 Button</button>
+  </div>
+  <div id="tabpanel-3" role="tabpanel" aria-labelledby="tab-3" data-testid="tabpanel-3" style="border:1px solid #ccc; padding:12px; border-radius:0 4px 4px 4px; display:none;">
+    Content for Tab 3. <select data-testid="tab3-select" aria-label="Tab 3 select"><option>A</option><option>B</option><option>C</option></select>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- JAVASCRIPT                                                      -->
+<!-- ================================================================ -->
+<script>
+  function setResult(msg) {
+    document.getElementById('form-result').textContent = msg;
+  }
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    const name = document.getElementById('submit-name').value;
+    const email = document.getElementById('submit-email').value;
+    setResult('Form submitted! Name: ' + (name || '(empty)') + ', Email: ' + (email || '(empty)'));
+  }
+
+  function handleClick() { setResult('Click Me button clicked!'); }
+  function handleSave() { setResult('Draft saved!'); }
+  function handleCancel() { setResult('Action cancelled.'); }
+  function handleDelete() { setResult('Item deleted!'); }
+
+  // Dynamic list
+  let itemCounter = 0;
+  function addDynamicItem() {
+    itemCounter++;
+    const li = document.createElement('li');
+    li.setAttribute('data-testid', 'dynamic-item-' + itemCounter);
+    li.style.cssText = 'display:flex; align-items:center; gap:8px; padding:6px 10px; margin-bottom:4px; background:#f5f5f5; border-radius:4px;';
+    li.innerHTML = `
+      <span>Item ${itemCounter}</span>
+      <input type="text" placeholder="Edit item ${itemCounter}" data-testid="dynamic-input-${itemCounter}" style="padding:4px 6px; border:1px solid #ccc; border-radius:3px; flex:1;">
+      <button type="button" class="btn-danger" style="padding:3px 10px; font-size:12px;" onclick="this.parentElement.remove()">Remove</button>
+    `;
+    document.getElementById('dynamic-list').appendChild(li);
+    setResult('Added item ' + itemCounter);
+  }
+
+  function clearDynamicItems() {
+    document.getElementById('dynamic-list').innerHTML = '';
+    setResult('All items cleared.');
+  }
+
+  // Toggle panel
+  function togglePanel() {
+    const panel = document.getElementById('toggleable-panel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+  }
+
+  // Tabs
+  function switchTab(n) {
+    for (let i = 1; i <= 3; i++) {
+      document.getElementById('tab-' + i).setAttribute('aria-selected', i === n ? 'true' : 'false');
+      document.getElementById('tab-' + i).style.background = i === n ? '#fff' : '#e0e0e0';
+      document.getElementById('tabpanel-' + i).style.display = i === n ? 'block' : 'none';
+    }
+  }
+
+  // Drag-drop area click handler
+  document.getElementById('drag-drop-area').addEventListener('click', function() {
+    document.getElementById('drag-drop-input').click();
+  });
+</script>
+
+</body>
+</html>
